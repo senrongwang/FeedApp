@@ -12,6 +12,7 @@ import com.bytedance.feedapp.R
 import com.bytedance.feedapp.model.FeedItem
 import com.bytedance.feedapp.model.ImageFeedItem
 import com.bytedance.feedapp.model.LoadingFeedItem
+import com.bytedance.feedapp.model.ProductFeedItem
 import com.bytedance.feedapp.model.TextFeedItem
 import com.bytedance.feedapp.model.VideoFeedItem
 import java.util.Locale
@@ -36,6 +37,7 @@ class FeedAdapter(
             is ImageFeedItem -> VIEW_TYPE_IMAGE
             is VideoFeedItem -> VIEW_TYPE_VIDEO
             is LoadingFeedItem -> VIEW_TYPE_LOADING
+            is ProductFeedItem -> TODO()
         }
     }
 

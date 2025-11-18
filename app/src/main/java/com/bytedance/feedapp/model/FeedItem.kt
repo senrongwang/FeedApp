@@ -21,4 +21,11 @@ data class VideoFeedItem(
     val text: String
 ) : FeedItem()
 
+data class ProductFeedItem(
+    override val id: String,
+    val imageUrl: String,
+    val name: String,
+    val price: String
+) : FeedItem()
+
 data class LoadingFeedItem(override val id: String = "-1") : FeedItem()

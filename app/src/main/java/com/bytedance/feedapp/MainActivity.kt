@@ -25,6 +25,7 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,14 +36,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.bytedance.feedapp.constants.Strings
-import com.bytedance.feedapp.data.MockRepo
 import com.bytedance.feedapp.model.ImageFeedItem
 import com.bytedance.feedapp.model.LoadingFeedItem
+import com.bytedance.feedapp.model.ProductFeedItem
 import com.bytedance.feedapp.model.TextFeedItem
 import com.bytedance.feedapp.model.VideoFeedItem
 import com.bytedance.feedapp.ui.theme.FeedAppTheme
+import com.bytedance.feedapp.viewmodel.FeedViewModel
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,11 +62,15 @@ class MainActivity : AppCompatActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FeedApp() {
+fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
     var searchText by remember { mutableStateOf(Strings.SEARCH_TEXT_PLACEHOLDER) }
     var selectedTabIndex by remember { mutableStateOf(0) }
     val tabs = Strings.TABS
-    val feedItems = MockRepo.getFeedItems()
+    val feedItems by feedViewModel.feedItems
+
+    LaunchedEffect(selectedTabIndex) {
+        feedViewModel.fetchFeedItemsForTab(tabs[selectedTabIndex])
+    }
 
     Column {
         Row(
@@ -102,6 +109,7 @@ fun FeedApp() {
                     is TextFeedItem -> TextCard(item)
                     is ImageFeedItem -> ImageCard(item)
                     is VideoFeedItem -> VideoCard(item)
+                    is ProductFeedItem -> ProductCard(item)
                     is LoadingFeedItem -> LoadingCard()
                 }
             }
@@ -148,6 +156,23 @@ fun VideoCard(item: VideoFeedItem) {
                 )
             }
             Text(text = item.text, modifier = Modifier.padding(16.dp))
+        }
+    }
+}
+
+@Composable
+fun ProductCard(item: ProductFeedItem) {
+    Card(modifier = Modifier.padding(8.dp).fillMaxWidth()) {
+        Column {
+            AsyncImage(
+                model = item.imageUrl,
+                contentDescription = null,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                Text(text = item.name, modifier = Modifier.weight(1f))
+                Text(text = item.price, color = Color.Red)
+            }
         }
     }
 }
