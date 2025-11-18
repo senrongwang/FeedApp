@@ -30,8 +30,8 @@ object MockRepo {
 
     private fun getVideoFeedItems(): List<FeedItem> {
         return listOf(
-            VideoFeedItem(id = "v1", videoUrl = "", text = "This is a video."),
-            VideoFeedItem(id = "v2", videoUrl = "", text = "Another video here.")
+            VideoFeedItem(id = "v1", videoUrl = "https://ts3.tc.mm.bing.net/th/id/OVP.cu7dO4nvlSCaZNxbiYgLwwIIFE?w=243&h=136&c=7&rs=1&qlt=70&o=7&pid=2.1&rm=3", text = "This is a video."),
+            VideoFeedItem(id = "v2", videoUrl = "https://www.bilibili.com/video/av67907933/", text = "Another video here.")
         )
     }
 

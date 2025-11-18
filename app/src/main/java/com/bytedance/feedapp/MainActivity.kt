@@ -46,6 +46,7 @@ import com.bytedance.feedapp.model.TextFeedItem
 import com.bytedance.feedapp.model.VideoFeedItem
 import com.bytedance.feedapp.ui.theme.FeedAppTheme
 import com.bytedance.feedapp.viewmodel.FeedViewModel
+import com.bytedance.feedapp.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,7 +81,7 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = { /* Handle back press */ }) {
-                Icon(painter = painterResource(id = android.R.drawable.ic_media_previous), contentDescription = Strings.BACK_BUTTON_CONTENT_DESCRIPTION)
+                Icon(painter = painterResource(id = R.drawable.baseline_arrow_back_ios_24), contentDescription = Strings.BACK_BUTTON_CONTENT_DESCRIPTION)
             }
             OutlinedTextField(
                 value = searchText,
