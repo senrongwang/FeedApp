@@ -1,10 +1,24 @@
 package com.bytedance.feedapp.model
 
-data class FeedItem(
-    val id: Long,
-    val type: String, // e.g., "text", "image", "video", "loading"
-    val content: String? = null,
-    val imageUrl: String? = null,
-    val videoUrl: String? = null,
-    val layout: String? = null
-)
+sealed class FeedItem {
+    abstract val id: String
+}
+
+data class TextFeedItem(
+    override val id: String,
+    val text: String
+) : FeedItem()
+
+data class ImageFeedItem(
+    override val id: String,
+    val imageUrl: String,
+    val text: String
+) : FeedItem()
+
+data class VideoFeedItem(
+    override val id: String,
+    val videoUrl: String,
+    val text: String
+) : FeedItem()
+
+data class LoadingFeedItem(override val id: String = "-1") : FeedItem()

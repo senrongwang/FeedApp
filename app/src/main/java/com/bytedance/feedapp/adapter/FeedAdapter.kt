@@ -10,6 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.bytedance.feedapp.R
 import com.bytedance.feedapp.model.FeedItem
+import com.bytedance.feedapp.model.ImageFeedItem
+import com.bytedance.feedapp.model.LoadingFeedItem
+import com.bytedance.feedapp.model.TextFeedItem
+import com.bytedance.feedapp.model.VideoFeedItem
 import java.util.Locale
 
 class FeedAdapter(
@@ -27,12 +31,11 @@ class FeedAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (items[position].type) {
-            "text" -> VIEW_TYPE_TEXT
-            "image" -> VIEW_TYPE_IMAGE
-            "video" -> VIEW_TYPE_VIDEO
-            "loading" -> VIEW_TYPE_LOADING
-            else -> throw IllegalArgumentException("Invalid view type")
+        return when (items[position]) {
+            is TextFeedItem -> VIEW_TYPE_TEXT
+            is ImageFeedItem -> VIEW_TYPE_IMAGE
+            is VideoFeedItem -> VIEW_TYPE_VIDEO
+            is LoadingFeedItem -> VIEW_TYPE_LOADING
         }
     }
 
@@ -62,9 +65,9 @@ class FeedAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = items[position]
         when (holder) {
-            is TextViewHolder -> holder.bind(item)
-            is ImageViewHolder -> holder.bind(item)
-            is VideoViewHolder -> holder.bind(item)
+            is TextViewHolder -> holder.bind(item as TextFeedItem)
+            is ImageViewHolder -> holder.bind(item as ImageFeedItem)
+            is VideoViewHolder -> holder.bind(item as VideoFeedItem)
             is LoadingViewHolder -> { /* No data to bind */ }
         }
     }
@@ -81,7 +84,7 @@ class FeedAdapter(
     fun addLoadingFooter() {
         if (!isLoading) {
             isLoading = true
-            items.add(FeedItem(-1, "loading"))
+            items.add(LoadingFeedItem())
             notifyItemInserted(items.size - 1)
         }
     }
@@ -123,8 +126,8 @@ class FeedAdapter(
     inner class TextViewHolder(itemView: View) : BaseViewHolder(itemView) {
         private val textContent: TextView = itemView.findViewById(R.id.text_content)
 
-        fun bind(item: FeedItem) {
-            textContent.text = item.content
+        fun bind(item: TextFeedItem) {
+            textContent.text = item.text
         }
     }
 
@@ -132,8 +135,8 @@ class FeedAdapter(
         private val imageContent: ImageView = itemView.findViewById(R.id.image_content)
         private val textContent: TextView = itemView.findViewById(R.id.text_content)
 
-        fun bind(item: FeedItem) {
-            textContent.text = item.content
+        fun bind(item: ImageFeedItem) {
+            textContent.text = item.text
             imageContent.load(item.imageUrl)
         }
     }
@@ -144,8 +147,8 @@ class FeedAdapter(
         private val textContent: TextView = itemView.findViewById(R.id.text_content)
         private var countDownTimer: CountDownTimer? = null
 
-        fun bind(item: FeedItem) {
-            textContent.text = item.content
+        fun bind(item: VideoFeedItem) {
+            textContent.text = item.text
             // You can load a thumbnail from the video here if you have one
             // videoThumbnail.load(item.videoThumbnailUrl)
         }
