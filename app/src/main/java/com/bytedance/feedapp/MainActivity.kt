@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bytedance.feedapp.constants.Strings
 import com.bytedance.feedapp.ui.theme.FeedAppTheme
 
 class MainActivity : AppCompatActivity() {
@@ -46,9 +47,9 @@ class MainActivity : AppCompatActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedApp() {
-    var searchText by remember { mutableStateOf("点击输入搜索内容") }
+    var searchText by remember { mutableStateOf(Strings.SEARCH_TEXT_PLACEHOLDER) }
     var selectedTabIndex by remember { mutableStateOf(0) }
-    val tabs = listOf("综合", "视频", "用户", "图文", "商品")
+    val tabs = Strings.TABS
 
     Column {
         Row(
@@ -58,16 +59,16 @@ fun FeedApp() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = { /* Handle back press */ }) {
-                Icon(painter = painterResource(id = android.R.drawable.ic_media_previous), contentDescription = "Back")
+                Icon(painter = painterResource(id = android.R.drawable.ic_media_previous), contentDescription = Strings.BACK_BUTTON_CONTENT_DESCRIPTION)
             }
             OutlinedTextField(
                 value = searchText,
                 onValueChange = { searchText = it },
                 modifier = Modifier.weight(1f),
-                placeholder = { Text("点击输入搜索内容") }
+                placeholder = { Text(Strings.SEARCH_TEXT_PLACEHOLDER) }
             )
             TextButton(onClick = { /* Handle search */ }) {
-                Text("搜索", color = Color.Red)
+                Text(Strings.SEARCH_BUTTON_TEXT, color = Color.Red)
             }
         }
 
