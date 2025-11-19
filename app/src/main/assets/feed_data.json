@@ -1,0 +1,26 @@
+
+{
+  "综合": [
+    { "type": "image", "id": "dog-1", "imageUrl": "https://pic.nximg.cn/file/20230308/34543442_165914838100_2.jpg", "text": "可爱的狗狗一号！" },
+    { "type": "image", "id": "dog-2", "imageUrl": "https://n.sinaimg.cn/sinacn10121/489/w1809h1080/20190411/b868-hvntnkq8059577.jpg", "text": "帅气的狗狗二号！" },
+    { "type": "text", "id": "text-1", "text": "这是一个来自JSON的纯文本信息。"},
+    { "type": "video", "id": "video-1", "videoUrl": "", "text": "这是一个来自JSON的视频信息。"},
+    { "type": "product", "id": "product-1", "imageUrl": "https://picsum.photos/seed/p1/400/400", "name": "JSON产品A", "price": "￥19.99" }
+  ],
+  "视频": [
+    { "type": "video", "id": "video-2", "videoUrl": "", "text": "这是一个视频标签页的视频。"},
+    { "type": "video", "id": "video-3", "videoUrl": "", "text": "这是另一个视频标签页的视频。"}
+  ],
+  "用户": [
+    { "type": "text", "id": "text-2", "text": "这是一个用户发布的内容。"},
+    { "type": "text", "id": "text-3", "text": "这是另一个用户发布的内容。"}
+  ],
+  "图文": [
+    { "type": "image", "id": "image-3", "imageUrl": "https://picsum.photos/seed/i3/400/300", "text": "这是一个图文标签页的图片。"},
+    { "type": "image", "id": "image-4", "imageUrl": "https://picsum.photos/seed/i4/400/300", "text": "这是另一个图文标签页的图片。"}
+  ],
+  "商品": [
+    { "type": "product", "id": "product-2", "imageUrl": "https://picsum.photos/seed/p2/400/400", "name": "JSON产品B", "price": "￥29.99" },
+    { "type": "product", "id": "product-3", "imageUrl": "https://picsum.photos/seed/p3/400/400", "name": "JSON产品C", "price": "￥39.99" }
+  ]
+}
