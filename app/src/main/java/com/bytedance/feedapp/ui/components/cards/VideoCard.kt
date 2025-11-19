@@ -17,23 +17,33 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.bytedance.feedapp.model.VideoFeedItem
 
+/**
+ * `VideoCard` 是一个 Composable 函数，用于显示视频信息流项目。
+ *
+ * @param item 要显示的 `VideoFeedItem` 数据。
+ */
 @Composable
 fun VideoCard(item: VideoFeedItem) {
+    // `Card` 可组合项为视频信息流项目提供了一个 Material Design 卡片容器。
     Card(modifier = Modifier.padding(8.dp).fillMaxWidth()) {
+        // `Column` 可组合项垂直排列其子项。
         Column {
+            // `Box` 可组合项用作视频预览的占位符。
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-                    .background(Color.Black),
-                contentAlignment = Alignment.Center
+                    .fillMaxWidth() // 填充父项的整个宽度。
+                    .height(200.dp) // 设置一个固定的高度。
+                    .background(Color.Black), // 设置一个黑色背景。
+                contentAlignment = Alignment.Center // 将子项在 `Box` 内居中对齐。
             ) {
+                // `Icon` 可组合项显示一个播放图标，表示这是一个视频。
                 Icon(
-                    painter = painterResource(id = android.R.drawable.ic_media_play),
-                    contentDescription = "Play Video",
-                    tint = Color.White
+                    painter = painterResource(id = android.R.drawable.ic_media_play), // 使用安卓内置的播放图标。
+                    contentDescription = "Play Video", // 为无障碍功能提供描述。
+                    tint = Color.White // 将图标颜色设置为白色，以便在黑色背景上可见。
                 )
             }
+            // `Text` 可组合项显示视频的附带文本。
             Text(text = item.text, modifier = Modifier.padding(16.dp))
         }
     }

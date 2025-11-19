@@ -9,9 +9,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.bytedance.feedapp.model.TextFeedItem
 
+/**
+ * `TextCard` 是一个 Composable 函数，用于显示纯文本信息流项目。
+ *
+ * @param item 要显示的 `TextFeedItem` 数据。
+ */
 @Composable
 fun TextCard(item: TextFeedItem) {
+    // `Card` 可组合项为文本信息流项目提供了一个 Material Design 卡片容器。
     Card(modifier = Modifier.padding(8.dp).fillMaxWidth()) {
+        // `Text` 可组合项显示 `TextFeedItem` 中包含的文本。
         Text(text = item.text, modifier = Modifier.padding(16.dp))
     }
 }

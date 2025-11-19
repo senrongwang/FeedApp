@@ -39,26 +39,31 @@ import com.bytedance.feedapp.ui.theme.FeedAppTheme
 import com.bytedance.feedapp.viewmodel.FeedViewModel
 
 /**
- * MainActivity 是应用的主入口 Activity。
+ * `MainActivity` 是应用的主入口 Activity。
  */
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // 在应用启动时注册所有可用的卡片视图。
         registerCardViews()
-        // 使用 setContent 将 Compose 内容设置到 Activity。
+        // 使用 `setContent` 将 Compose 内容设置到 Activity。
         setContent {
-            // FeedAppTheme 应用自定义的 Material Design 主题。
+            // `FeedAppTheme` 应用自定义的 Material Design 主题。
             FeedAppTheme {
-                // Surface 是一个为其子项提供背景颜色和海拔效果的容器。
+                // `Surface` 是一个为其子项提供背景颜色和高程效果的容器。
                 Surface(color = MaterialTheme.colorScheme.background) {
-                    // FeedApp 是应用的主Composable函数。
+                    // `FeedApp` 是应用的主 Composable 函数。
                     FeedApp()
                 }
             }
         }
     }
 
+    /**
+     * `registerCardViews` 函数负责将所有卡片类型的 Composable 函数注册到 `CardRegistry` 中。
+     * 这种方法使得在不修改核心逻辑的情况下，可以轻松扩展新的卡片类型。
+     */
     private fun registerCardViews() {
         CardRegistry.registerCard("text") { item ->
             if (item is TextFeedItem) {
@@ -84,14 +89,14 @@ class MainActivity : AppCompatActivity() {
 }
 
 /**
- * FeedApp 是应用的主界面，负责组合搜索、标签页和信息流列表等UI组件。
+ * `FeedApp` 是应用的主界面，负责组合搜索、标签页和信息流列表等 UI 组件。
  * 这个 Composable 函数遵循“状态向下流动，事件向上传递”的原则。
  *
- * @param feedViewModel ViewModel实例，提供UI所需的状态和事件处理函数。
+ * @param feedViewModel ViewModel 实例，提供 UI 所需的状态和事件处理函数。
  */
 @Composable
 fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
-    // 从 ViewModel 中获取UI所需的状态。
+    // 从 ViewModel 中获取 UI 所需的状态。
     val feedItems by feedViewModel.feedItems
     val isRefreshing by feedViewModel.isRefreshing
     val selectedTabIndex by feedViewModel.selectedTabIndex
@@ -99,18 +104,18 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
     val isLoadingMore by feedViewModel.isLoadingMore
     val hasMoreData by feedViewModel.hasMoreData
 
-    // searchText 是一个纯UI状态，保留在Composable中是合理的。
+    // `searchText` 是一个纯 UI 状态，保留在 Composable 中是合理的。
     var searchText by remember { mutableStateOf(StringsConstants.SEARCH_TEXT_PLACEHOLDER) }
 
-    // Box 作为根容器，允许内容层叠，例如在列表上显示提示信息。
+    // `Box` 作为根容器，允许内容层叠，例如在列表上显示提示信息。
     Box(modifier = Modifier.fillMaxSize()) {
-        // Column 将子项垂直排列。
+        // `Column` 将子项垂直排列。
         Column {
             // 搜索栏组件。
             SearchBar(searchText = searchText, onSearchTextChange = { searchText = it })
-            // 标签页组件，点击事件向上传递给ViewModel处理。
+            // 标签页组件，点击事件向上传递给 ViewModel 处理。
             FeedTabs(selectedTabIndex = selectedTabIndex, onTabClick = { index -> feedViewModel.onTabSelected(index) })
-            // 信息流列表组件，下拉刷新和加载更多事件向上传递给ViewModel处理。
+            // 信息流列表组件，下拉刷新和加载更多事件向上传递给 ViewModel 处理。
             FeedList(
                 feedItems = feedItems,
                 isRefreshing = isRefreshing,
@@ -121,7 +126,7 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
             )
         }
 
-        // 根据ViewModel的状态，决定是否显示“刷新成功”的提示。
+        // 根据 ViewModel 的状态，决定是否显示“刷新成功”的提示。
         if (showSuccessMessage) {
             Text(
                 text = StringsConstants.REFRESH_INFO,
@@ -140,7 +145,7 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
 }
 
 /**
- * 为 FeedApp Composable 提供在 Android Studio 中预览的功能。
+ * 为 `FeedApp` Composable 提供在 Android Studio 中预览的功能。
  */
 @Preview(showBackground = true)
 @Composable

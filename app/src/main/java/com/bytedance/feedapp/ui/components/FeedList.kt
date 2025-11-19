@@ -23,7 +23,7 @@ import com.bytedance.feedapp.constants.StringsConstants
 import com.bytedance.feedapp.model.FeedItem
 
 /**
- * FeedList 是一个 Composable 函数，用于显示信息流项目列表，并支持下拉刷新和无限滚动加载功能。
+ * `FeedList` 是一个 Composable 函数，用于显示信息流项目列表，并支持下拉刷新和无限滚动加载功能。
  *
  * @param feedItems 要显示的信息流项目列表。
  * @param isRefreshing 指示当前是否正在刷新的布尔值。
@@ -75,18 +75,18 @@ fun FeedList(
             }
     }
 
-
-    // Box 容器应用 nestedScroll 连接，以将滚动事件传递给下拉刷新状态。
+    // `Box` 容器应用 `nestedScroll` 连接，以将滚动事件传递给下拉刷新状态。
     Box(Modifier.nestedScroll(state.nestedScrollConnection)) {
-        // LazyColumn 用于高效地显示大量或无限的列表项。
+        // `LazyColumn` 用于高效地显示大量或无限的列表项。
         LazyColumn(
             state = listState,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(8.dp)
         ) {
-            // items 函数遍历 feedItems 列表，为每个项目创建一个 Composable。
+            // `items` 函数遍历 `feedItems` 列表，为每个项目创建一个 Composable。
             items(feedItems) { item ->
+                // 从 `CardRegistry` 中获取与信息流项目类型对应的 Composable 函数，并调用它来渲染卡片。
                 CardRegistry.getCard(item.type)?.invoke(item)
             }
 
