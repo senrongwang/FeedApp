@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.bytedance.feedapp.constants.Integers
-import com.bytedance.feedapp.constants.Strings
+import com.bytedance.feedapp.constants.IntegersConstants
+import com.bytedance.feedapp.constants.StringsConstants
 import com.bytedance.feedapp.data.MockRepo
 import com.bytedance.feedapp.model.FeedItem
 import kotlinx.coroutines.delay
@@ -36,7 +36,7 @@ class FeedViewModel(application: Application) : AndroidViewModel(application) {
     init {
         // 初始化时加载并解析JSON数据，然后获取第一个标签页的数据。
         MockRepo.loadAndParseFeedData(application)
-        fetchInitialFeedItems(Strings.TABS[selectedTabIndex.value])
+        fetchInitialFeedItems(StringsConstants.TABS[selectedTabIndex.value])
     }
 
     /**
@@ -46,7 +46,7 @@ class FeedViewModel(application: Application) : AndroidViewModel(application) {
      */
     fun onTabSelected(index: Int) {
         selectedTabIndex.value = index
-        fetchInitialFeedItems(Strings.TABS[index])
+        fetchInitialFeedItems(StringsConstants.TABS[index])
     }
 
     /**
@@ -67,15 +67,15 @@ class FeedViewModel(application: Application) : AndroidViewModel(application) {
     fun refreshFeedItems() {
         viewModelScope.launch {
             isRefreshing.value = true
-            delay(Integers.REFRESH_DELAY) // 模拟网络请求延迟。
+            delay(IntegersConstants.REFRESH_DELAY) // 模拟网络请求延迟。
 
             // 刷新时重置分页并获取第一页数据
-            fetchInitialFeedItems(Strings.TABS[selectedTabIndex.value])
+            fetchInitialFeedItems(StringsConstants.TABS[selectedTabIndex.value])
 
             isRefreshing.value = false
             // 刷新成功后显示提示信息。
             showSuccessMessage.value = true
-            delay(Integers.SUCCESS_MESSAGE_DELAY) // 提示显示2秒。
+            delay(IntegersConstants.SUCCESS_MESSAGE_DELAY) // 提示显示2秒。
             showSuccessMessage.value = false
         }
     }
@@ -90,9 +90,9 @@ class FeedViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             isLoadingMore.value = true
             currentPage++
-            delay(Integers.REFRESH_DELAY) // 模拟网络延迟
+            delay(IntegersConstants.REFRESH_DELAY) // 模拟网络延迟
 
-            val newItems = MockRepo.getFeedItemsForTab(Strings.TABS[selectedTabIndex.value], currentPage, pageSize)
+            val newItems = MockRepo.getFeedItemsForTab(StringsConstants.TABS[selectedTabIndex.value], currentPage, pageSize)
 
             if (newItems.isNotEmpty()) {
                 feedItems.value = feedItems.value + newItems

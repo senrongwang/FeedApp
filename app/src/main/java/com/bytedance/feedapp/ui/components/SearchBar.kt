@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.bytedance.feedapp.R
-import com.bytedance.feedapp.constants.Strings
+import com.bytedance.feedapp.constants.StringsConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -31,16 +31,16 @@ fun SearchBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(onClick = { /* Handle back press */ }) {
-            Icon(painter = painterResource(id = R.drawable.baseline_arrow_back_ios_24), contentDescription = Strings.BACK_BUTTON_CONTENT_DESCRIPTION)
+            Icon(painter = painterResource(id = R.drawable.baseline_arrow_back_ios_24), contentDescription = StringsConstants.BACK_BUTTON_CONTENT_DESCRIPTION)
         }
         OutlinedTextField(
             value = searchText,
             onValueChange = onSearchTextChange,
             modifier = Modifier.weight(1f),
-            placeholder = { Text(Strings.SEARCH_TEXT_PLACEHOLDER) }
+            placeholder = { Text(StringsConstants.SEARCH_TEXT_PLACEHOLDER) }
         )
         TextButton(onClick = { /* Handle search */ }) {
-            Text(Strings.SEARCH_BUTTON_TEXT, color = Color.Red)
+            Text(StringsConstants.SEARCH_BUTTON_TEXT, color = Color.Red)
         }
     }
 }

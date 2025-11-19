@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.bytedance.feedapp.constants.Strings
+import com.bytedance.feedapp.constants.StringsConstants
 import com.bytedance.feedapp.ui.components.FeedList
 import com.bytedance.feedapp.ui.components.FeedTabs
 import com.bytedance.feedapp.ui.components.SearchBar
@@ -66,7 +66,7 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
     val hasMoreData by feedViewModel.hasMoreData
 
     // searchText 是一个纯UI状态，保留在Composable中是合理的。
-    var searchText by remember { mutableStateOf(Strings.SEARCH_TEXT_PLACEHOLDER) }
+    var searchText by remember { mutableStateOf(StringsConstants.SEARCH_TEXT_PLACEHOLDER) }
 
     // Box 作为根容器，允许内容层叠，例如在列表上显示提示信息。
     Box(modifier = Modifier.fillMaxSize()) {
@@ -90,7 +90,7 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
         // 根据ViewModel的状态，决定是否显示“刷新成功”的提示。
         if (showSuccessMessage) {
             Text(
-                text = Strings.REFRESH_INFO,
+                text = StringsConstants.REFRESH_INFO,
                 modifier = Modifier
                     .align(Alignment.BottomCenter) // 居于底部中心
                     .padding(16.dp) // 外边距

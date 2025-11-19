@@ -28,7 +28,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.bytedance.feedapp.constants.Strings
+import com.bytedance.feedapp.constants.StringsConstants
 import com.bytedance.feedapp.model.FeedItem
 import com.bytedance.feedapp.model.ImageFeedItem
 import com.bytedance.feedapp.model.ProductFeedItem
@@ -227,6 +227,6 @@ private fun NoMoreDataIndicator() {
             .padding(16.dp),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = Strings.NO_MORE_DATA)
+        Text(text = StringsConstants.NO_MORE_DATA)
     }
 }
