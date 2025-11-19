@@ -13,14 +13,14 @@ class FeedViewModel : ViewModel() {
     val isRefreshing = mutableStateOf(false)
 
     fun fetchFeedItemsForTab(tab: String) {
-        feedItems.value = MockRepo.getFeedItemsForTab(tab)
+        feedItems.value = MockRepo.getFeedItemsForTab(tab).shuffled()
     }
 
     fun refreshFeedItems(tab: String) {
         viewModelScope.launch {
             isRefreshing.value = true
             delay(1500) // Simulate a network request
-            feedItems.value = MockRepo.getFeedItemsForTab(tab)
+            feedItems.value = MockRepo.getFeedItemsForTab(tab).shuffled()
             isRefreshing.value = false
         }
     }
