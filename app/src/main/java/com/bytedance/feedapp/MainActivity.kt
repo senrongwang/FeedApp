@@ -39,6 +39,7 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
     var searchText by remember { mutableStateOf(Strings.SEARCH_TEXT_PLACEHOLDER) }
     var selectedTabIndex by remember { mutableStateOf(0) }
     val feedItems by feedViewModel.feedItems
+    val isRefreshing by feedViewModel.isRefreshing
 
     LaunchedEffect(selectedTabIndex) {
         feedViewModel.fetchFeedItemsForTab(Strings.TABS[selectedTabIndex])
@@ -47,7 +48,11 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
     Column {
         SearchBar(searchText = searchText, onSearchTextChange = { searchText = it })
         FeedTabs(selectedTabIndex = selectedTabIndex, onTabClick = { selectedTabIndex = it })
-        FeedList(feedItems = feedItems)
+        FeedList(
+            feedItems = feedItems,
+            isRefreshing = isRefreshing,
+            onRefresh = { feedViewModel.refreshFeedItems(Strings.TABS[selectedTabIndex]) }
+        )
     }
 }
 
