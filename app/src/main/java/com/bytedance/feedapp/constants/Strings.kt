@@ -7,4 +7,6 @@ object Strings {
     val TABS = listOf("综合", "视频", "用户", "图文", "商品")
 
     const val REFRESH_INFO = "刷新成功"
+    const val LOADING_MORE = "正在加载..."
+    const val NO_MORE_DATA = "没有更多内容了"
 }
