@@ -23,9 +23,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bytedance.feedapp.constants.StringsConstants
+import com.bytedance.feedapp.model.ImageFeedItem
+import com.bytedance.feedapp.model.ProductFeedItem
+import com.bytedance.feedapp.model.TextFeedItem
+import com.bytedance.feedapp.model.VideoFeedItem
+import com.bytedance.feedapp.ui.components.CardRegistry
 import com.bytedance.feedapp.ui.components.FeedList
 import com.bytedance.feedapp.ui.components.FeedTabs
 import com.bytedance.feedapp.ui.components.SearchBar
+import com.bytedance.feedapp.ui.components.cards.ImageCard
+import com.bytedance.feedapp.ui.components.cards.ProductCard
+import com.bytedance.feedapp.ui.components.cards.TextCard
+import com.bytedance.feedapp.ui.components.cards.VideoCard
 import com.bytedance.feedapp.ui.theme.FeedAppTheme
 import com.bytedance.feedapp.viewmodel.FeedViewModel
 
@@ -35,6 +44,8 @@ import com.bytedance.feedapp.viewmodel.FeedViewModel
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        registerCardViews()
         // 使用 setContent 将 Compose 内容设置到 Activity。
         setContent {
             // FeedAppTheme 应用自定义的 Material Design 主题。
@@ -44,6 +55,29 @@ class MainActivity : AppCompatActivity() {
                     // FeedApp 是应用的主Composable函数。
                     FeedApp()
                 }
+            }
+        }
+    }
+
+    private fun registerCardViews() {
+        CardRegistry.registerCard("text") { item ->
+            if (item is TextFeedItem) {
+                TextCard(item = item)
+            }
+        }
+        CardRegistry.registerCard("image") { item ->
+            if (item is ImageFeedItem) {
+                ImageCard(item = item)
+            }
+        }
+        CardRegistry.registerCard("video") { item ->
+            if (item is VideoFeedItem) {
+                VideoCard(item = item)
+            }
+        }
+        CardRegistry.registerCard("product") { item ->
+            if (item is ProductFeedItem) {
+                ProductCard(item = item)
             }
         }
     }
