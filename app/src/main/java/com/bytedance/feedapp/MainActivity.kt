@@ -62,6 +62,8 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
     val isRefreshing by feedViewModel.isRefreshing
     val selectedTabIndex by feedViewModel.selectedTabIndex
     val showSuccessMessage by feedViewModel.showSuccessMessage
+    val isLoadingMore by feedViewModel.isLoadingMore
+    val hasMoreData by feedViewModel.hasMoreData
 
     // searchText 是一个纯UI状态，保留在Composable中是合理的。
     var searchText by remember { mutableStateOf(Strings.SEARCH_TEXT_PLACEHOLDER) }
@@ -74,11 +76,14 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
             SearchBar(searchText = searchText, onSearchTextChange = { searchText = it })
             // 标签页组件，点击事件向上传递给ViewModel处理。
             FeedTabs(selectedTabIndex = selectedTabIndex, onTabClick = { index -> feedViewModel.onTabSelected(index) })
-            // 信息流列表组件，下拉刷新事件向上传递给ViewModel处理。
+            // 信息流列表组件，下拉刷新和加载更多事件向上传递给ViewModel处理。
             FeedList(
                 feedItems = feedItems,
                 isRefreshing = isRefreshing,
-                onRefresh = { feedViewModel.refreshFeedItems() }
+                onRefresh = { feedViewModel.refreshFeedItems() },
+                isLoadingMore = isLoadingMore,
+                hasMoreData = hasMoreData,
+                onLoadMore = { feedViewModel.loadMoreFeedItems() }
             )
         }
 
