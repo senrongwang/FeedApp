@@ -48,9 +48,7 @@ fun FeedList(
     }
 
     LaunchedEffect(isRefreshing) {
-        if (isRefreshing) {
-            state.startRefresh()
-        } else {
+        if (!isRefreshing) {
             state.endRefresh()
         }
     }
@@ -71,11 +69,12 @@ fun FeedList(
                 }
             }
         }
-
-        PullToRefreshContainer(
-            modifier = Modifier.align(Alignment.TopCenter),
-            state = state,
-        )
+        if (state.isRefreshing || state.progress > 0) {
+            PullToRefreshContainer(
+                modifier = Modifier.align(Alignment.TopCenter),
+                state = state,
+            )
+        }
     }
 }
 
