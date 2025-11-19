@@ -56,7 +56,7 @@ class FeedViewModel : ViewModel() {
         viewModelScope.launch {
             isRefreshing.value = true
             delay(Integers.REFRESH_DELAY) // 模拟网络请求延迟。
-            feedItems.value = MockRepo.getFeedItemsForTab(Strings.TABS[selectedTabIndex.value]).shuffled()
+            feedItems.value = MockRepo.getFeedItemsForTab(Strings.TABS[selectedTabIndex.value]).shuffled() // 打乱顺序，模拟刷新
             isRefreshing.value = false
             // 刷新成功后显示提示信息。
             showSuccessMessage.value = true
