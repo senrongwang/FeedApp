@@ -1,7 +1,8 @@
 package com.bytedance.feedapp.viewmodel
 
+import android.app.Application
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.bytedance.feedapp.constants.Integers
 import com.bytedance.feedapp.constants.Strings
@@ -14,7 +15,7 @@ import kotlinx.coroutines.launch
  * FeedViewModel 负责管理信息流（Feed）的数据和业务逻辑。
  * 它处理数据的获取、刷新，并维护UI所需的状态。
  */
-class FeedViewModel : ViewModel() {
+class FeedViewModel(application: Application) : AndroidViewModel(application) {
     // `feedItems` 用于存储当前显示在界面上的信息流项目列表。
     val feedItems = mutableStateOf<List<FeedItem>>(emptyList())
     // `isRefreshing` 标记当前是否正在执行下拉刷新操作。
@@ -30,10 +31,12 @@ class FeedViewModel : ViewModel() {
 
     // `currentPage` 用于跟踪加载更多时的分页。
     private var currentPage = 1
+    private val pageSize = 5 // 每页加载的数量
 
     init {
-        // 初始化时获取第一个标签页的数据。
-        fetchFeedItemsForTab(Strings.TABS[selectedTabIndex.value])
+        // 初始化时加载并解析JSON数据，然后获取第一个标签页的数据。
+        MockRepo.loadAndParseFeedData(application)
+        fetchInitialFeedItems(Strings.TABS[selectedTabIndex.value])
     }
 
     /**
@@ -43,20 +46,19 @@ class FeedViewModel : ViewModel() {
      */
     fun onTabSelected(index: Int) {
         selectedTabIndex.value = index
-        fetchFeedItemsForTab(Strings.TABS[index])
+        fetchInitialFeedItems(Strings.TABS[index])
     }
 
     /**
-     * 根据指定的标签页获取信息流数据。
+     * 根据指定的标签页获取初始信息流数据。
      *
      * @param tab 当前选中的标签页名称。
      */
-    private fun fetchFeedItemsForTab(tab: String) {
+    private fun fetchInitialFeedItems(tab: String) {
         // 重置分页状态
         currentPage = 1
         hasMoreData.value = true
-        // 为了演示，我们从MockRepo获取数据。在真实应用中，这里会进行网络请求。
-        feedItems.value = MockRepo.getFeedItemsForTab(tab).shuffled()
+        feedItems.value = MockRepo.getFeedItemsForTab(tab, currentPage, pageSize)
     }
 
     /**
@@ -68,9 +70,7 @@ class FeedViewModel : ViewModel() {
             delay(Integers.REFRESH_DELAY) // 模拟网络请求延迟。
 
             // 刷新时重置分页并获取第一页数据
-            currentPage = 1
-            hasMoreData.value = true
-            feedItems.value = MockRepo.getFeedItemsForTab(Strings.TABS[selectedTabIndex.value]).shuffled()
+            fetchInitialFeedItems(Strings.TABS[selectedTabIndex.value])
 
             isRefreshing.value = false
             // 刷新成功后显示提示信息。
@@ -92,12 +92,7 @@ class FeedViewModel : ViewModel() {
             currentPage++
             delay(Integers.REFRESH_DELAY) // 模拟网络延迟
 
-            // 假设页码大于2时没有更多数据
-            val newItems = if (currentPage > 2) {
-                emptyList()
-            } else {
-                MockRepo.getFeedItemsForTab(Strings.TABS[selectedTabIndex.value]).shuffled()
-            }
+            val newItems = MockRepo.getFeedItemsForTab(Strings.TABS[selectedTabIndex.value], currentPage, pageSize)
 
             if (newItems.isNotEmpty()) {
                 feedItems.value = feedItems.value + newItems
