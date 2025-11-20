@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bytedance.feedapp.constants.StringsConstants
+import com.bytedance.feedapp.model.FeedItem
 import com.bytedance.feedapp.model.ImageFeedItem
 import com.bytedance.feedapp.model.ProductFeedItem
 import com.bytedance.feedapp.model.TextFeedItem
@@ -35,6 +36,7 @@ import com.bytedance.feedapp.ui.components.cards.ImageCard
 import com.bytedance.feedapp.ui.components.cards.ProductCard
 import com.bytedance.feedapp.ui.components.cards.TextCard
 import com.bytedance.feedapp.ui.components.cards.VideoCard
+import com.bytedance.feedapp.ui.components.dialogs.DeleteConfirmationDialog
 import com.bytedance.feedapp.ui.theme.FeedAppTheme
 import com.bytedance.feedapp.viewmodel.FeedViewModel
 
@@ -65,24 +67,24 @@ class MainActivity : AppCompatActivity() {
      * 这种方法使得在不修改核心逻辑的情况下，可以轻松扩展新的卡片类型。
      */
     private fun registerCardViews() {
-        CardRegistry.registerCard("text") { item ->
+        CardRegistry.registerCard("text") { item, onLongPress ->
             if (item is TextFeedItem) {
-                TextCard(item = item)
+                TextCard(item = item, onLongPress = onLongPress)
             }
         }
-        CardRegistry.registerCard("image") { item ->
+        CardRegistry.registerCard("image") { item, onLongPress ->
             if (item is ImageFeedItem) {
-                ImageCard(item = item)
+                ImageCard(item = item, onLongPress = onLongPress)
             }
         }
-        CardRegistry.registerCard("video") { item ->
+        CardRegistry.registerCard("video") { item, onLongPress ->
             if (item is VideoFeedItem) {
-                VideoCard(item = item)
+                VideoCard(item = item, onLongPress = onLongPress)
             }
         }
-        CardRegistry.registerCard("product") { item ->
+        CardRegistry.registerCard("product") { item, onLongPress ->
             if (item is ProductFeedItem) {
-                ProductCard(item = item)
+                ProductCard(item = item, onLongPress = onLongPress)
             }
         }
     }
@@ -103,6 +105,7 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
     val showSuccessMessage by feedViewModel.showSuccessMessage
     val isLoadingMore by feedViewModel.isLoadingMore
     val hasMoreData by feedViewModel.hasMoreData
+    val showDeleteConfirmationDialog by feedViewModel.showDeleteConfirmationDialog
 
     // `searchText` 是一个纯 UI 状态，保留在 Composable 中是合理的。
     var searchText by remember { mutableStateOf(StringsConstants.SEARCH_TEXT_PLACEHOLDER) }
@@ -122,7 +125,16 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
                 onRefresh = { feedViewModel.refreshFeedItems() },
                 isLoadingMore = isLoadingMore,
                 hasMoreData = hasMoreData,
-                onLoadMore = { feedViewModel.loadMoreFeedItems() }
+                onLoadMore = { feedViewModel.loadMoreFeedItems() },
+                onDeleteItem = { item -> feedViewModel.onDeleteItem(item) }
+            )
+        }
+
+        // 根据 ViewModel 的状态，决定是否显示删除确认对话框。
+        if (showDeleteConfirmationDialog) {
+            DeleteConfirmationDialog(
+                onConfirm = { feedViewModel.confirmDeleteItem() },
+                onCancel = { feedViewModel.cancelDeleteItem() }
             )
         }
 

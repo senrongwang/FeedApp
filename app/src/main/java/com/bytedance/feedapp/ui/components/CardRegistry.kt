@@ -9,7 +9,7 @@ import com.bytedance.feedapp.model.FeedItem
  */
 object CardRegistry {
     // `cardViewRegistry` 是一个私有可变映射，用于存储卡片类型（字符串）与其对应的 Composable 函数之间的关系。
-    private val cardViewRegistry = mutableMapOf<String, @Composable (FeedItem) -> Unit>()
+    private val cardViewRegistry = mutableMapOf<String, @Composable (FeedItem, (FeedItem) -> Unit) -> Unit>()
 
     /**
      * `registerCard` 函数用于向注册表中添加一个新的卡片类型及其 Composable 函数。
@@ -17,7 +17,7 @@ object CardRegistry {
      * @param type 卡片类型的唯一标识符（例如，“text”、“image”）。
      * @param card 与该类型关联的 Composable 函数。
      */
-    fun registerCard(type: String, card: @Composable (FeedItem) -> Unit) {
+    fun registerCard(type: String, card: @Composable (FeedItem, (FeedItem) -> Unit) -> Unit) {
         cardViewRegistry[type] = card
     }
 
@@ -27,7 +27,7 @@ object CardRegistry {
      * @param type 要检索的卡片类型的标识符。
      * @return 如果找到了对应类型的 Composable 函数，则返回它；否则返回 `null`。
      */
-    fun getCard(type: String): (@Composable (FeedItem) -> Unit)? {
+    fun getCard(type: String): (@Composable (FeedItem, (FeedItem) -> Unit) -> Unit)? {
         return cardViewRegistry[type]
     }
 }

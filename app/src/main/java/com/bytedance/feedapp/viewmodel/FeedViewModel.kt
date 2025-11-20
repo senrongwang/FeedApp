@@ -12,8 +12,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
- * FeedViewModel 负责管理信息流（Feed）的数据和业务逻辑。
- * 它处理数据的获取、刷新，并维护UI所需的状态。
+ * `FeedViewModel` 负责管理信息流（Feed）的数据和业务逻辑。
+ * 它处理数据的获取、刷新、删除，并维护 UI 所需的状态。
  */
 class FeedViewModel(application: Application) : AndroidViewModel(application) {
     // `feedItems` 用于存储当前显示在界面上的信息流项目列表。
@@ -28,6 +28,10 @@ class FeedViewModel(application: Application) : AndroidViewModel(application) {
     val isLoadingMore = mutableStateOf(false)
     // `hasMoreData` 标记是否还有更多数据可供加载。
     val hasMoreData = mutableStateOf(true)
+    // `showDeleteConfirmationDialog` 控制删除确认对话框的显示状态。
+    val showDeleteConfirmationDialog = mutableStateOf(false)
+    // `itemToDelete` 用于暂存待删除的信息流项目。
+    val itemToDelete = mutableStateOf<FeedItem?>(null)
 
     // `currentPage` 用于跟踪加载更多时的分页。
     private var currentPage = 1
@@ -102,5 +106,44 @@ class FeedViewModel(application: Application) : AndroidViewModel(application) {
 
             isLoadingMore.value = false
         }
+    }
+
+    /**
+     * 当用户长按某个信息流项目时调用，用于准备删除操作。
+     *
+     * @param item 被长按的信息流项目。
+     */
+    fun onDeleteItem(item: FeedItem) {
+        itemToDelete.value = item
+        showDeleteConfirmationDialog.value = true
+    }
+
+    /**
+     * 确认删除信息流项目。
+     */
+    fun confirmDeleteItem() {
+        itemToDelete.value?.let { item ->
+            val currentItems = feedItems.value.toMutableList()
+            currentItems.remove(item)
+            feedItems.value = currentItems
+        }
+        // 重置状态
+        resetDeleteState()
+    }
+
+    /**
+     * 取消删除操作。
+     */
+    fun cancelDeleteItem() {
+        // 重置状态
+        resetDeleteState()
+    }
+
+    /**
+     * 重置与删除相关的状态。
+     */
+    private fun resetDeleteState() {
+        itemToDelete.value = null
+        showDeleteConfirmationDialog.value = false
     }
 }

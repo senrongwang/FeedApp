@@ -1,5 +1,6 @@
 package com.bytedance.feedapp.ui.components.cards
 
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -7,6 +8,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.bytedance.feedapp.model.ImageFeedItem
@@ -15,11 +17,23 @@ import com.bytedance.feedapp.model.ImageFeedItem
  * `ImageCard` 是一个 Composable 函数，用于显示带图片和文本的信息流项目。
  *
  * @param item 要显示的 `ImageFeedItem` 数据。
+ * @param onLongPress 用户长按卡片时调用的回调函数。
  */
 @Composable
-fun ImageCard(item: ImageFeedItem) {
+fun ImageCard(item: ImageFeedItem, onLongPress: (ImageFeedItem) -> Unit) {
     // `Card` 可组合项为图片信息流项目提供了一个 Material Design 卡片容器。
-    Card(modifier = Modifier.padding(8.dp).fillMaxWidth()) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth()
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onLongPress = {
+                        onLongPress(item)
+                    }
+                )
+            }
+    ) {
         // `Column` 可组合项垂直排列其子项。
         Column {
             // `AsyncImage` 是一个来自 Coil 库的 Composable 函数，用于异步加载和显示图片。
