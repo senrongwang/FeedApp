@@ -9,4 +9,10 @@ object StringsConstants {
     const val REFRESH_INFO = "刷新成功"
     const val LOADING_MORE = "正在加载..."
     const val NO_MORE_DATA = "没有更多内容了"
+
+    // Delete Confirmation Dialog
+    const val DELETE_CONFIRMATION_TITLE = "确认删除"
+    const val DELETE_CONFIRMATION_MESSAGE = "您确定要删除这张卡片吗？"
+    const val CONFIRM = "确认"
+    const val CANCEL = "取消"
 }

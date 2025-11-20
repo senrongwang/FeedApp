@@ -1,6 +1,7 @@
 package com.bytedance.feedapp.ui.components.cards
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.bytedance.feedapp.model.VideoFeedItem
@@ -21,11 +23,23 @@ import com.bytedance.feedapp.model.VideoFeedItem
  * `VideoCard` 是一个 Composable 函数，用于显示视频信息流项目。
  *
  * @param item 要显示的 `VideoFeedItem` 数据。
+ * @param onLongPress 用户长按卡片时调用的回调函数。
  */
 @Composable
-fun VideoCard(item: VideoFeedItem) {
+fun VideoCard(item: VideoFeedItem, onLongPress: (VideoFeedItem) -> Unit) {
     // `Card` 可组合项为视频信息流项目提供了一个 Material Design 卡片容器。
-    Card(modifier = Modifier.padding(8.dp).fillMaxWidth()) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth()
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onLongPress = {
+                        onLongPress(item)
+                    }
+                )
+            }
+    ) {
         // `Column` 可组合项垂直排列其子项。
         Column {
             // `Box` 可组合项用作视频预览的占位符。
