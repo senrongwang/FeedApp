@@ -22,4 +22,7 @@ object StringsConstants {
     const val DELETE_CONFIRMATION_MESSAGE = "您确定要删除这张卡片吗？"
     const val CONFIRM = "确认"
     const val CANCEL = "取消"
+
+    // --- 卡片曝光tag
+    const val EXPOSURE_TRACKER_TAG = "ExposureTracker"
 }
