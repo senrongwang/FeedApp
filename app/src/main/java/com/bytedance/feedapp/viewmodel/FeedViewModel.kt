@@ -65,16 +65,17 @@ class FeedViewModel(application: Application) : AndroidViewModel(application) {
     /** 加载下一页的数据。*/
     fun loadMoreFeedItems() {
         if (isLoadingMore.value || !hasMoreData.value) return
-
+        isLoadingMore.value = true
         viewModelScope.launch {
-            isLoadingMore.value = true
             currentPage++
             delay(IntegersConstants.REFRESH_DELAY)
 
             val newItems = MockRepo.getFeedItemsForTab(StringsConstants.TABS[selectedTabIndex.value], currentPage, pageSize)
 
             if (newItems.isNotEmpty()) {
-                feedItems.value = feedItems.value + newItems
+                val currentItems = feedItems.value
+                val distinctNewItems = newItems.filter { newItem -> currentItems.none { it.id == newItem.id } }
+                feedItems.value = currentItems + distinctNewItems
             } else {
                 hasMoreData.value = false
             }
