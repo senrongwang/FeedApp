@@ -7,10 +7,10 @@ import androidx.compose.runtime.Composable
 import com.bytedance.feedapp.constants.StringsConstants
 
 /**
- * `DeleteConfirmationDialog` 是一个 Composable 函数，用于显示一个确认删除操作的对话框。
+ * 显示一个标准的删除确认对话框。
  *
- * @param onConfirm 用户点击“确认”按钮时调用的回调函数。
- * @param onCancel 用户点击“取消”按钮时调用的回调函数。
+ * @param onConfirm 用户点击“确认”时的回调。
+ * @param onCancel 用户点击“取消”或关闭对话框时的回调。
  */
 @Composable
 fun DeleteConfirmationDialog(
@@ -18,7 +18,7 @@ fun DeleteConfirmationDialog(
     onCancel: () -> Unit
 ) {
     AlertDialog(
-        onDismissRequest = onCancel, // 当用户点击对话框外部或按下返回键时，也视为取消。
+        onDismissRequest = onCancel,
         title = {
             Text(text = StringsConstants.DELETE_CONFIRMATION_TITLE)
         },
