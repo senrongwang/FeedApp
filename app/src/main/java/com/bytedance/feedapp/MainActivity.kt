@@ -28,9 +28,11 @@ import com.bytedance.feedapp.model.ProductFeedItem
 import com.bytedance.feedapp.model.TextFeedItem
 import com.bytedance.feedapp.model.VideoFeedItem
 import com.bytedance.feedapp.ui.components.CardRegistry
+import com.bytedance.feedapp.ui.components.ExposureTestTool
 import com.bytedance.feedapp.ui.components.FeedList
 import com.bytedance.feedapp.ui.components.FeedTabs
 import com.bytedance.feedapp.ui.components.SearchBar
+import com.bytedance.feedapp.ui.components.TestExposureCallback
 import com.bytedance.feedapp.ui.components.cards.ImageCard
 import com.bytedance.feedapp.ui.components.cards.ProductCard
 import com.bytedance.feedapp.ui.components.cards.TextCard
@@ -109,6 +111,8 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
     // `searchText` 是一个纯 UI 状态，保留在 Composable 中是合理的。
     var searchText by remember { mutableStateOf(StringsConstants.SEARCH_TEXT_PLACEHOLDER) }
 
+    val exposureCallback = remember { TestExposureCallback() }
+
     // `Box` 作为根容器，允许内容层叠，例如在列表上显示提示信息。
     Box(modifier = Modifier.fillMaxSize()) {
         // `Column` 将子项垂直排列。
@@ -125,7 +129,8 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
                 isLoadingMore = isLoadingMore,
                 hasMoreData = hasMoreData,
                 onLoadMore = { feedViewModel.loadMoreFeedItems() },
-                onDeleteItem = { item -> feedViewModel.onDeleteItem(item) }
+                onDeleteItem = { item -> feedViewModel.onDeleteItem(item) },
+                exposureCallback = exposureCallback
             )
         }
 
@@ -152,6 +157,9 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
                 color = MaterialTheme.colorScheme.onPrimaryContainer // 文字颜色
             )
         }
+
+        // 在屏幕上显示曝光测试工具
+        ExposureTestTool(testExposureCallback = exposureCallback)
     }
 }
 
