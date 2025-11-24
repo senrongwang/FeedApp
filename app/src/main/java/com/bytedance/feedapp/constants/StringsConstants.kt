@@ -25,4 +25,11 @@ object StringsConstants {
 
     // --- 卡片曝光tag
     const val EXPOSURE_TRACKER_TAG = "ExposureTracker"
+
+    // 卡片排版格式
+    const val FEEDITEM_SINGLE_COLUMN = "single_column"
+    const val FEEDITEM_DOUBLE_COLUMN = "double_column"
+
+//    const val defaultFeedItemLayout = FEEDITEM_SINGLE_COLUMN
+    const val DEFAULTFEEDTIEMLAYOUT = FEEDITEM_SINGLE_COLUMN
 }
