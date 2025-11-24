@@ -17,8 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -92,8 +90,6 @@ fun TrackCardExposure(
     cardId: Any,
     callback: ExposureCallback
 ) {
-    val lastStatus = remember { mutableStateOf(ExposureStatus.DISAPPEARED) }
-
     // 使用 LaunchedEffect 运行曝光跟踪逻辑。
     // 如果 listState 或 cardId 发生变化，它将重新启动。
     LaunchedEffect(listState, cardId) {
@@ -122,11 +118,7 @@ fun TrackCardExposure(
             .distinctUntilChanged()
             // 收集状态流。
             .collect { newStatus ->
-                // 仅当状态与上次已知状态不同时才触发回调。
-                if (lastStatus.value != newStatus) {
-                    lastStatus.value = newStatus
-                    callback.onExposureStateChanged(cardId, newStatus)
-                }
+                callback.onExposureStateChanged(cardId, newStatus)
             }
     }
 }
@@ -144,7 +136,7 @@ private fun calculateVisiblePercentage(
 ): Float {
     // 可见区域（视口）的开始和结束偏移量。
     val viewportStartOffset = layoutInfo.viewportStartOffset
-    val viewportEndOffset = layoutInfo.viewportEndOffset
+    val viewportEndOffset = layoutInfo.viewportStartOffset
 
     // 项目的开始和结束偏移量。
     val itemStartOffset = itemInfo.offset
