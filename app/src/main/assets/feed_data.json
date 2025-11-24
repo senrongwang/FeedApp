@@ -1,7 +1,7 @@
 
 {
   "综合": [
-    { "type": "image", "id": "dog-1", "imageUrl": "https://pic.nximg.cn/file/20230308/34543442_165914838100_2.jpg", "text": "可爱的狗狗一号！" },
+    { "type": "image", "id": "dog-1", "imageUrl": "https://pic.nximg.cn/file/20230308/34543442_165914838100_2.jpg", "text": "可爱的狗狗一号！"},
     { "type": "image", "id": "dog-2", "imageUrl": "https://n.sinaimg.cn/sinacn10121/489/w1809h1080/20190411/b868-hvntnkq8059577.jpg", "text": "帅气的狗狗二号！" },
     { "type": "text", "id": "text-1", "text": "这是一个来自JSON的纯文本信息。"},
     { "type": "video", "id": "video-1", "videoUrl": "", "text": "这是一个来自JSON的视频信息。"},

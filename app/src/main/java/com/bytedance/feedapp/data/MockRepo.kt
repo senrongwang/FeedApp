@@ -1,6 +1,7 @@
 package com.bytedance.feedapp.data
 
 import android.content.Context
+import com.bytedance.feedapp.constants.StringsConstants
 import com.bytedance.feedapp.model.FeedItem
 import com.bytedance.feedapp.model.ImageFeedItem
 import com.bytedance.feedapp.model.ProductFeedItem
@@ -69,6 +70,10 @@ class FeedItemDeserializer : JsonDeserializer<FeedItem> {
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): FeedItem? {
         val jsonObject = json.asJsonObject
         val type = jsonObject.get("type").asString
+
+        if (!jsonObject.has("layout")) {
+            jsonObject.addProperty("layout", StringsConstants.DEFAULTFEEDTIEMLAYOUT)
+        }
 
         return when (type) {
             "text" -> context.deserialize(jsonObject, TextFeedItem::class.java)

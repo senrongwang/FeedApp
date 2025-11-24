@@ -153,7 +153,7 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
                         color = MaterialTheme.colorScheme.primaryContainer, // 背景色
                         shape = RoundedCornerShape(8.dp) // 圆角
                     )
-                    .padding(horizontal = 16.dp, vertical = 8.dp), // 内边距
+                    .padding(horizontal = 8.dp, vertical = 4.dp), // 内边距
                 color = MaterialTheme.colorScheme.onPrimaryContainer // 文字颜色
             )
         }

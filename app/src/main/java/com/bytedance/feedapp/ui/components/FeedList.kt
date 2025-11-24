@@ -1,12 +1,15 @@
 package com.bytedance.feedapp.ui.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
+import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -63,11 +66,11 @@ fun FeedList(
         }
     }
 
-    val listState = rememberLazyListState()
+    val gridState = rememberLazyStaggeredGridState()
 
     // 当用户滚动到列表末尾时，触发加载更多
-    LaunchedEffect(listState, isLoadingMore, hasMoreData) {
-        snapshotFlow { listState.layoutInfo }
+    LaunchedEffect(gridState, isLoadingMore, hasMoreData) {
+        snapshotFlow { gridState.layoutInfo }
             .collect { layoutInfo ->
                 val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
                 val totalItemsCount = layoutInfo.totalItemsCount
@@ -81,27 +84,35 @@ fun FeedList(
 
     // `Box` 容器应用 `nestedScroll` 连接，以将滚动事件传递给下拉刷新状态。
     Box(Modifier.nestedScroll(state.nestedScrollConnection)) {
-        // `LazyColumn` 用于高效地显示大量或无限的列表项。
-        LazyColumn(
-            state = listState,
+        // 使用 `LazyVerticalStaggeredGrid` 来实现瀑布流布局
+        LazyVerticalStaggeredGrid(
+            columns = StaggeredGridCells.Fixed(2),
+            state = gridState,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(8.dp)
+                .padding(2.dp),
+            horizontalArrangement = Arrangement.spacedBy(1.dp),
+            verticalItemSpacing = 1.dp
         ) {
-            // `items` 函数遍历 `feedItems` 列表，为每个项目创建一个 Composable。
-            items(feedItems, key = { it.id }) { item ->
+            items(feedItems, key = { it.id }, span = { item ->
+                if (item.layout == StringsConstants.FEEDITEM_SINGLE_COLUMN) {
+                    StaggeredGridItemSpan.FullLine
+                } else {
+                    StaggeredGridItemSpan.SingleLane
+                }
+            }) { item ->
                 // 从 `CardRegistry` 中获取与信息流项目类型对应的 Composable 函数，并调用它来渲染卡片。
                 CardRegistry.getCard(item.type)?.invoke(item, onDeleteItem)
 
                 TrackCardExposure(
-                    listState = listState,
+                    gridState = gridState, 
                     cardId = item.id,
                     callback = exposureCallback
                 )
             }
 
             // 在列表末尾显示加载中或没有更多数据的指示器
-            item {
+            item(span = StaggeredGridItemSpan.FullLine) {
                 if (isLoadingMore) {
                     LoadingMoreIndicator()
                 } else if (!hasMoreData) {
