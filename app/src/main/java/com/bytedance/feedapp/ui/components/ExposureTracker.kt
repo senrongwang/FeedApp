@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridItemInfo
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridLayoutInfo
@@ -93,13 +92,14 @@ fun TrackCardExposure(
     callback: ExposureCallback
 ) {
     LaunchedEffect(gridState, cardId) {
-        snapshotFlow { gridState.layoutInfo }
-            .map { layoutInfo ->
+        snapshotFlow { gridState.layoutInfo to gridState.firstVisibleItemScrollOffset }
+            .map { (layoutInfo, _) ->
                 val itemInfo = layoutInfo.visibleItemsInfo.find { it.key == cardId }
                 if (itemInfo == null) {
                     ExposureStatus.DISAPPEARED
                 } else {
                     val visiblePercentage = calculateVisiblePercentage(itemInfo, layoutInfo)
+                    Log.d(TAG,"cardId：$cardId, visiblePercentage：$visiblePercentage")
                     when {
                         visiblePercentage >= 1.0f -> ExposureStatus.FULLY_VISIBLE
                         visiblePercentage >= 0.5f -> ExposureStatus.VISIBLE_50_PERCENT
@@ -113,36 +113,6 @@ fun TrackCardExposure(
                 callback.onExposureStateChanged(cardId, newStatus)
             }
     }
-}
-
-/**
- * 计算列表项在视口内的可见百分比。
- *
- * @param itemInfo 项目的 [LazyListItemInfo]。
- * @param layoutInfo 列表的 [androidx.compose.foundation.lazy.LazyListLayoutInfo]。
- * @return 项目的可见百分比，为 0.0 到 1.0 之间的浮点数。
- */
-private fun calculateVisiblePercentage(
-    itemInfo: LazyListItemInfo,
-    layoutInfo: androidx.compose.foundation.lazy.LazyListLayoutInfo
-): Float {
-    // 可见区域（视口）的开始和结束偏移量。
-    val viewportStartOffset = layoutInfo.viewportStartOffset
-    val viewportEndOffset = layoutInfo.viewportEndOffset
-
-    // 项目的开始和结束偏移量。
-    val itemStartOffset = itemInfo.offset
-    val itemEndOffset = itemInfo.offset + itemInfo.size
-
-    // 计算项目和视口之间的交集。
-    val visibleStart = max(itemStartOffset, viewportStartOffset)
-    val visibleEnd = min(itemEndOffset, viewportEndOffset)
-
-    // 项目可见部分的高度。
-    val visibleHeight = (visibleEnd - visibleStart).coerceAtLeast(0)
-
-    // 计算可见性百分比。
-    return if (itemInfo.size > 0) visibleHeight.toFloat() / itemInfo.size.toFloat() else 0f
 }
 
 /**
