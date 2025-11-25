@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListItemInfo
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridItemInfo
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridLayoutInfo
@@ -76,53 +75,6 @@ class TestExposureCallback : ExposureCallback {
     override fun onExposureStateChanged(cardId: Any, status: ExposureStatus) {
         Log.d(TAG, "Card $cardId - status: $status")
         exposureState[cardId] = status
-    }
-}
-
-/**
- * 一个可组合函数，用于跟踪 [LazyListState] 中特定项目的曝光情况。
- * 它使用 [snapshotFlow] 来有效地观察布局信息的变化，并确定由 [cardId] 标识的项目的可见性。
- *
- * @param listState 包含要跟踪的项目的列表的 [LazyListState]。
- * @param cardId 要跟踪的项目的唯一键，作为 `item` 或 `items` 的 `key` 参数提供。
- * @param callback 当曝光状态改变时要调用的 [ExposureCallback]。
- */
-@Composable
-fun TrackCardExposure(
-    listState: LazyListState,
-    cardId: Any,
-    callback: ExposureCallback
-) {
-    // 使用 LaunchedEffect 运行曝光跟踪逻辑。
-    // 如果 listState 或 cardId 发生变化，它将重新启动。
-    LaunchedEffect(listState, cardId) {
-        // snapshotFlow 将 LazyListState 的 layoutInfo 转换成一个 Flow。
-        // 每当可见项目的布局发生变化时，此流都会发出一个新值。
-        snapshotFlow { listState.layoutInfo }
-            .map { layoutInfo ->
-                // 从可见项目列表中查找特定项目的信息。
-                val itemInfo = layoutInfo.visibleItemsInfo.find { it.key == cardId }
-                if (itemInfo == null) {
-                    // 如果项目不在可见项目列表中，则它已消失。
-                    ExposureStatus.DISAPPEARED
-                } else {
-                    // 如果项目可见，则计算其可见百分比。
-                    val visiblePercentage = calculateVisiblePercentage(itemInfo, layoutInfo)
-                    // 根据可见百分比确定曝光状态。
-                    when {
-                        visiblePercentage >= 1.0f -> ExposureStatus.FULLY_VISIBLE
-                        visiblePercentage >= 0.5f -> ExposureStatus.VISIBLE_50_PERCENT
-                        visiblePercentage > 0f -> ExposureStatus.VISIBLE
-                        else -> ExposureStatus.DISAPPEARED
-                    }
-                }
-            }
-            // 使用 distinctUntilChanged 仅在状态实际更改时才接收通知。
-            .distinctUntilChanged()
-            // 收集状态流。
-            .collect { newStatus ->
-                callback.onExposureStateChanged(cardId, newStatus)
-            }
     }
 }
 
@@ -243,7 +195,7 @@ fun ExposureTestTool(
                 .padding(8.dp)
         ) {
             Text(
-                text = "曝光事件测试工具",
+                text = StringsConstants.EXPOSURE_EVENT_TEXT,
                 color = Color.White,
                 fontWeight = FontWeight.Bold
             )

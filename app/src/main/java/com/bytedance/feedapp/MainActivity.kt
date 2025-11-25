@@ -159,7 +159,7 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
         }
 
         // 在屏幕上显示曝光测试工具
-//        ExposureTestTool(testExposureCallback = exposureCallback)
+        ExposureTestTool(testExposureCallback = exposureCallback)
     }
 }
 

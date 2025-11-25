@@ -32,4 +32,8 @@ object StringsConstants {
 
 //    const val defaultFeedItemLayout = FEEDITEM_SINGLE_COLUMN
     const val DEFAULTFEEDTIEMLAYOUT = FEEDITEM_SINGLE_COLUMN
+
+    // ---- 曝光事件文本 ------
+    const val EXPOSURE_EVENT_TEXT = "曝光事件测试工具"
+
 }
