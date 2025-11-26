@@ -1,6 +1,7 @@
 package com.bytedance.feedapp.data
 
 import android.content.Context
+import android.util.Log
 import com.bytedance.feedapp.constants.StringsConstants
 import com.bytedance.feedapp.model.FeedItem
 import com.bytedance.feedapp.model.ImageFeedItem
@@ -41,6 +42,7 @@ object MockRepo {
             // 模拟网络请求
             val networkJson = context.assets.open(FILE_NAME).bufferedReader().use { it.readText() }
             // 缓存成功获取的数据
+            Log.d("loadingLocal", "loading fileName: $FILE_NAME")
             saveToCache(context, networkJson)
             networkJson
         } catch (e: IOException) {
@@ -104,6 +106,7 @@ object MockRepo {
      */
     private fun loadFromCache(context: Context): String? {
         return try {
+            Log.d("loadingLocal", "loading fileName: $CACHE_FILE_NAME")
             val file = File(context.filesDir, CACHE_FILE_NAME)
             if (file.exists()) {
                 file.readText()
