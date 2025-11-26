@@ -37,8 +37,7 @@ class FeedViewModel(application: Application) : AndroidViewModel(application) {
     private val pageSize = 5
 
     init {
-        MockRepo.loadAndParseFeedData(application)
-        fetchInitialFeedItems(StringsConstants.TABS[selectedTabIndex.value])
+        loadInitialData()
     }
 
     /** 当用户切换标签页时调用。*/
@@ -53,6 +52,8 @@ class FeedViewModel(application: Application) : AndroidViewModel(application) {
             isRefreshing.value = true
             delay(IntegersConstants.REFRESH_DELAY)
 
+            // 重新加载数据，MockRepo 会处理网络和缓存
+            MockRepo.loadAndParseFeedData(getApplication())
             fetchInitialFeedItems(StringsConstants.TABS[selectedTabIndex.value])
 
             isRefreshing.value = false
@@ -70,6 +71,7 @@ class FeedViewModel(application: Application) : AndroidViewModel(application) {
             currentPage++
             delay(IntegersConstants.REFRESH_DELAY)
 
+            // 从内存中获取下一页数据
             val newItems = MockRepo.getFeedItemsForTab(StringsConstants.TABS[selectedTabIndex.value], currentPage, pageSize)
 
             if (newItems.isNotEmpty()) {
@@ -116,5 +118,11 @@ class FeedViewModel(application: Application) : AndroidViewModel(application) {
     private fun resetDeleteState() {
         itemToDelete.value = null
         showDeleteConfirmationDialog.value = false
+    }
+
+    /** 加载初始数据，由 MockRepo 处理缓存逻辑。*/
+    private fun loadInitialData() {
+        MockRepo.loadAndParseFeedData(getApplication())
+        fetchInitialFeedItems(StringsConstants.TABS[selectedTabIndex.value])
     }
 }
