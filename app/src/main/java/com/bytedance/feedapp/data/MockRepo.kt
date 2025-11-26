@@ -72,7 +72,7 @@ class FeedItemDeserializer : JsonDeserializer<FeedItem> {
         val type = jsonObject.get("type").asString
 
         if (!jsonObject.has("layout")) {
-            jsonObject.addProperty("layout", StringsConstants.DEFAULTFEEDTIEMLAYOUT)
+            jsonObject.addProperty("layout", StringsConstants.DEFAULT_FEED_TIEM_LAYOUT)
         }
 
         return when (type) {
