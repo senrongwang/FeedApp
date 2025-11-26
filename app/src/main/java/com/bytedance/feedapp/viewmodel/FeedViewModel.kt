@@ -10,6 +10,7 @@ import com.bytedance.feedapp.data.MockRepo
 import com.bytedance.feedapp.model.FeedItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 /**
  * `FeedViewModel` 负责管理信息流的业务逻辑和UI状态。
@@ -24,6 +25,8 @@ class FeedViewModel(application: Application) : AndroidViewModel(application) {
     val selectedTabIndex = mutableStateOf(0)
     // UI 状态：显示成功消息
     val showSuccessMessage = mutableStateOf(false)
+    // UI 状态：显示错误消息
+    val showErrorMessage = mutableStateOf<String?>(null)
     // UI 状态：是否正在加载更多
     val isLoadingMore = mutableStateOf(false)
     // 数据状态：是否还有更多数据
@@ -50,16 +53,17 @@ class FeedViewModel(application: Application) : AndroidViewModel(application) {
     fun refreshFeedItems() {
         viewModelScope.launch {
             isRefreshing.value = true
-            delay(IntegersConstants.REFRESH_DELAY)
-
-            // 重新加载数据，MockRepo 会处理网络和缓存
-            MockRepo.loadAndParseFeedData(getApplication())
-            fetchInitialFeedItems(StringsConstants.TABS[selectedTabIndex.value])
-
+            showErrorMessage.value = null // 清除旧的错误信息
+            try {
+                MockRepo.loadAndParseFeedData(getApplication())
+                fetchInitialFeedItems(StringsConstants.TABS[selectedTabIndex.value])
+                showSuccessMessage.value = true
+                delay(IntegersConstants.SUCCESS_MESSAGE_DELAY)
+                showSuccessMessage.value = false
+            } catch (e: IOException) {
+                showErrorMessage.value = StringsConstants.NETWORK_ERROR_MESSAGE
+            }
             isRefreshing.value = false
-            showSuccessMessage.value = true
-            delay(IntegersConstants.SUCCESS_MESSAGE_DELAY)
-            showSuccessMessage.value = false
         }
     }
 
@@ -120,9 +124,15 @@ class FeedViewModel(application: Application) : AndroidViewModel(application) {
         showDeleteConfirmationDialog.value = false
     }
 
-    /** 加载初始数据，由 MockRepo 处理缓存逻辑。*/
+    /** 在协程中加载初始数据，由 MockRepo 处理缓存逻辑。*/
     private fun loadInitialData() {
-        MockRepo.loadAndParseFeedData(getApplication())
-        fetchInitialFeedItems(StringsConstants.TABS[selectedTabIndex.value])
+        viewModelScope.launch {
+            try {
+                MockRepo.loadAndParseFeedData(getApplication())
+                fetchInitialFeedItems(StringsConstants.TABS[selectedTabIndex.value])
+            } catch (e: IOException) {
+                showErrorMessage.value = StringsConstants.NETWORK_ERROR_MESSAGE
+            }
+        }
     }
 }

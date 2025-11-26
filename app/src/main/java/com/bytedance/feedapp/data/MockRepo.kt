@@ -13,9 +13,12 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
 import java.lang.reflect.Type
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * 一个模拟的数据仓库，负责从本地 JSON 文件加载和管理信息流数据。
@@ -28,31 +31,30 @@ object MockRepo {
     // 内部存储文件
     private const val CACHE_FILE_NAME = "feed_cache.json"
 
-    // 内存缓存，存储所有信息流数据，设为可变以支持删除。
-    private var allFeedData: MutableMap<String, MutableList<FeedItem>> = mutableMapOf()
+    // 使用 ConcurrentHashMap 提高线程安全性
+    private var allFeedData: ConcurrentHashMap<String, MutableList<FeedItem>> = ConcurrentHashMap()
 
     /**
-     * 加载并解析信息流数据。
+     * 加载并解析信息流数据。所有I/O和解析操作都在IO线程上执行。
      * 首先尝试从模拟的网络（assets/feed_data.json）加载，如果成功则缓存数据。
      * 如果失败，则尝试从本地缓存加载。
-     * 此函数会清除旧数据，以支持刷新操作。
+     * 如果两者都失败，则抛出异常。
      */
-    fun loadAndParseFeedData(context: Context) {
+    suspend fun loadAndParseFeedData(context: Context) = withContext(Dispatchers.IO) {
         val jsonString = try {
             // 模拟网络请求
             val networkJson = context.assets.open(FILE_NAME).bufferedReader().use { it.readText() }
-            // 缓存成功获取的数据
-            Log.d("loadingLocal", "loading fileName: $FILE_NAME")
             saveToCache(context, networkJson)
+            Log.d("loadingLocal", "loading fileName: $FILE_NAME")
             networkJson
         } catch (e: IOException) {
-            // 网络请求失败时，从缓存加载
-            loadFromCache(context)
+            // 网络请求失败时，从缓存加载，如果缓存也失败则抛出异常
+            loadFromCache(context) ?: throw IOException("网络加载失败")
         }
 
-        // 刷新时，先清除旧数据
+        // 清除旧数据并解析新数据
         allFeedData.clear()
-        jsonString?.let { parseAndCacheData(it) }
+        parseAndCacheData(jsonString)
     }
 
     /**
@@ -60,19 +62,28 @@ object MockRepo {
      */
     fun getFeedItemsForTab(tab: String, page: Int, pageSize: Int): List<FeedItem> {
         val itemsForTab = allFeedData[tab] ?: return emptyList()
+        // 创建一个副本以避免在迭代时被修改
+        val safeList = synchronized(itemsForTab) {
+            itemsForTab.toList()
+        }
         val startIndex = (page - 1) * pageSize
-        if (startIndex >= itemsForTab.size) {
+        if (startIndex >= safeList.size) {
             return emptyList()
         }
-        val endIndex = (startIndex + pageSize).coerceAtMost(itemsForTab.size)
-        return itemsForTab.subList(startIndex, endIndex).toList()
+        val endIndex = (startIndex + pageSize).coerceAtMost(safeList.size)
+        return safeList.subList(startIndex, endIndex)
     }
 
     /**
      * 从数据源中删除指定的信息流项目。
      */
     fun deleteFeedItem(item: FeedItem, tab: String) {
-        allFeedData[tab]?.removeAll { it.id == item.id }
+        allFeedData[tab]?.let {
+            // 在同步块中操作列表保证线程安全
+            synchronized(it) {
+                it.removeAll { feedItem -> feedItem.id == item.id }
+            }
+        }
     }
 
     /**
@@ -85,7 +96,8 @@ object MockRepo {
 
         val type = object : TypeToken<Map<String, List<FeedItem>>>() {}.type
         val immutableMap: Map<String, List<FeedItem>> = gson.fromJson(jsonString, type)
-        allFeedData = immutableMap.mapValues { it.value.toMutableList() }.toMutableMap()
+        // toMutableList() 创建了新的列表，因此是安全的
+        allFeedData.putAll(immutableMap.mapValues { it.value.toMutableList() })
     }
 
     /**
@@ -96,7 +108,6 @@ object MockRepo {
             val file = File(context.filesDir, CACHE_FILE_NAME)
             file.writeText(jsonString)
         } catch (e: IOException) {
-            // 在实际应用中，这里应该有更详细的错误处理
             e.printStackTrace()
         }
     }
@@ -106,8 +117,8 @@ object MockRepo {
      */
     private fun loadFromCache(context: Context): String? {
         return try {
-            Log.d("loadingLocal", "loading fileName: $CACHE_FILE_NAME")
             val file = File(context.filesDir, CACHE_FILE_NAME)
+            Log.d("loadingLocal", "loading fileName: $CACHE_FILE_NAME")
             if (file.exists()) {
                 file.readText()
             } else {

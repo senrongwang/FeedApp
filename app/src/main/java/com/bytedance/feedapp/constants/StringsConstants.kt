@@ -36,4 +36,7 @@ object StringsConstants {
     // ---- 曝光事件文本 ------
     const val EXPOSURE_EVENT_TEXT = "曝光事件测试工具"
 
+    // --- 网络错误消息 --
+    const val NETWORK_ERROR_MESSAGE = "网络加载失败"
+
 }

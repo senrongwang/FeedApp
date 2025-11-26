@@ -10,9 +10,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,6 +41,7 @@ import com.bytedance.feedapp.ui.components.cards.VideoCard
 import com.bytedance.feedapp.ui.components.dialogs.DeleteConfirmationDialog
 import com.bytedance.feedapp.ui.theme.FeedAppTheme
 import com.bytedance.feedapp.viewmodel.FeedViewModel
+import kotlinx.coroutines.delay
 
 /**
  * `MainActivity` 是应用的主入口 Activity。
@@ -103,6 +106,7 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
     val isRefreshing by feedViewModel.isRefreshing
     val selectedTabIndex by feedViewModel.selectedTabIndex
     val showSuccessMessage by feedViewModel.showSuccessMessage
+    val errorMessage by feedViewModel.showErrorMessage
     val isLoadingMore by feedViewModel.isLoadingMore
     val hasMoreData by feedViewModel.hasMoreData
     val showDeleteConfirmationDialog by feedViewModel.showDeleteConfirmationDialog
@@ -155,6 +159,23 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
                     .padding(horizontal = 8.dp, vertical = 4.dp), // 内边距
                 color = MaterialTheme.colorScheme.onPrimaryContainer // 文字颜色
             )
+        }
+
+        // 当有错误消息时，显示 Snackbar
+        errorMessage?.let { msg ->
+            var snackbarVisible by remember { mutableStateOf(true) }
+            LaunchedEffect(errorMessage) {
+                snackbarVisible = true
+                delay(2000) // 2秒后自动消失
+                snackbarVisible = false
+            }
+            if (snackbarVisible) {
+                Snackbar(
+                    modifier = Modifier.align(Alignment.BottomCenter).padding(16.dp),
+                ) {
+                    Text(text = msg)
+                }
+            }
         }
 
         // 在屏幕上显示曝光测试工具
