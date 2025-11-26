@@ -1,27 +1,41 @@
-
 {
   "综合": [
     { "type": "image", "id": "dog-1", "imageUrl": "https://pic.nximg.cn/file/20230308/34543442_165914838100_2.jpg", "text": "可爱的狗狗一号！"},
     { "type": "image", "id": "dog-2", "imageUrl": "https://n.sinaimg.cn/sinacn10121/489/w1809h1080/20190411/b868-hvntnkq8059577.jpg", "text": "帅气的狗狗二号！" },
     { "type": "text", "id": "text-1", "text": "这是一个来自JSON的纯文本信息。"},
     { "type": "video", "id": "video-1", "videoUrl": "", "text": "这是一个来自JSON的视频信息。"},
-    { "type": "product", "id": "product-1", "imageUrl": "https://picsum.photos/seed/p1/400/400", "name": "JSON产品A", "price": "￥19.99" }
+    { "type": "product", "id": "product-1", "imageUrl": "https://picsum.photos/seed/p1/400/400", "name": "JSON产品A", "price": "￥19.99" },
+    { "type": "image", "id": "dog-3", "imageUrl": "https://picsum.photos/seed/dog3/400/300", "text": "呆萌的狗狗三号（新增）！" },
+    { "type": "text", "id": "text-new-1", "text": "这是新增的一条综合类文本通知。"},
+    { "type": "product", "id": "product-new-1", "imageUrl": "https://picsum.photos/seed/p_new1/400/400", "name": "JSON新品推荐", "price": "￥88.00" }
   ],
   "视频": [
     { "type": "video", "id": "video-2", "videoUrl": "", "text": "这是一个视频标签页的视频。"},
-    { "type": "video", "id": "video-3", "videoUrl": "", "text": "这是另一个视频标签页的视频。"}
+    { "type": "video", "id": "video-3", "videoUrl": "", "text": "这是另一个视频标签页的视频。"},
+    { "type": "video", "id": "video-4", "videoUrl": "", "text": "2025年最新科技发布会回顾。"},
+    { "type": "video", "id": "video-5", "videoUrl": "", "text": "十分钟学会做美味意大利面。"},
+    { "type": "video", "id": "video-6", "videoUrl": "", "text": "大自然的奇妙声音：雨林篇。"}
   ],
   "用户": [
     { "type": "text", "id": "text-2", "text": "这是一个用户发布的内容。"},
-    { "type": "text", "id": "text-3", "text": "这是另一个用户发布的内容。"}
+    { "type": "text", "id": "text-3", "text": "这是另一个用户发布的内容。"},
+    { "type": "text", "id": "text-4", "text": "今天的天气真不错，适合出去踏青！"},
+    { "type": "text", "id": "text-5", "text": "求助：有人知道这个功能怎么开启吗？"},
+    { "type": "text", "id": "text-6", "text": "刚刚打卡了那家新开的咖啡店，味道很赞。"}
   ],
   "图文": [
     { "type": "image", "id": "image-3", "imageUrl": "https://picsum.photos/seed/i3/400/300", "text": "这是一个图文标签页的图片。"},
-    { "type": "image", "id": "image-4", "imageUrl": "https://picsum.photos/seed/i4/400/300", "text": "这是另一个图文标签页的图片。"}
+    { "type": "image", "id": "image-4", "imageUrl": "https://picsum.photos/seed/i4/400/300", "text": "这是另一个图文标签页的图片。"},
+    { "type": "image", "id": "image-5", "imageUrl": "https://picsum.photos/seed/i5/400/300", "text": "城市夜景摄影作品赏析。"},
+    { "type": "image", "id": "image-6", "imageUrl": "https://picsum.photos/seed/i6/400/300", "text": "秋日落叶特写，色彩斑斓。"},
+    { "type": "image", "id": "image-7", "imageUrl": "https://picsum.photos/seed/i7/400/300", "text": "极简主义建筑风格展示。"}
   ],
   "商品": [
     { "type": "product", "id": "product-1", "imageUrl": "https://picsum.photos/seed/p1/400/400", "name": "JSON产品A", "price": "￥19.99" },
     { "type": "product", "id": "product-2", "imageUrl": "https://picsum.photos/seed/p2/400/400", "name": "JSON产品B", "price": "￥29.99" },
-    { "type": "product", "id": "product-3", "imageUrl": "https://picsum.photos/seed/p3/400/400", "name": "JSON产品C", "price": "￥39.99" }
+    { "type": "product", "id": "product-3", "imageUrl": "https://picsum.photos/seed/p3/400/400", "name": "JSON产品C", "price": "￥39.99" },
+    { "type": "product", "id": "product-4", "imageUrl": "https://picsum.photos/seed/p4/400/400", "name": "JSON产品D（超值版）", "price": "￥9.99" },
+    { "type": "product", "id": "product-5", "imageUrl": "https://picsum.photos/seed/p5/400/400", "name": "JSON产品E（豪华版）", "price": "￥199.99" },
+    { "type": "product", "id": "product-6", "imageUrl": "https://picsum.photos/seed/p6/400/400", "name": "JSON产品F（家庭装）", "price": "￥59.50" }
   ]
 }

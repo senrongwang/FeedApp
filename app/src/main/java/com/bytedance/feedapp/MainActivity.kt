@@ -28,7 +28,6 @@ import com.bytedance.feedapp.model.ProductFeedItem
 import com.bytedance.feedapp.model.TextFeedItem
 import com.bytedance.feedapp.model.VideoFeedItem
 import com.bytedance.feedapp.ui.components.CardRegistry
-import com.bytedance.feedapp.ui.components.ExposureTestTool
 import com.bytedance.feedapp.ui.components.FeedList
 import com.bytedance.feedapp.ui.components.FeedTabs
 import com.bytedance.feedapp.ui.components.SearchBar
@@ -159,7 +158,7 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
         }
 
         // 在屏幕上显示曝光测试工具
-        ExposureTestTool(testExposureCallback = exposureCallback)
+//        ExposureTestTool(testExposureCallback = exposureCallback)
     }
 }
 
