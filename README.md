@@ -4,5 +4,5 @@
 - 支持无限加载更多（loadMore）功能  done
 - 支持删卡操作，长按卡片出删卡确认对话框，确认后删卡 done
 - 具备多种卡片样式，卡片包含文字和图片，卡片样式及数据内容均由服务端数据下发（不同卡片样式可做象征性展示）。 done
-- 支持排版方式混排，每张卡片均可对排版方式进行控制，可选择单列或双列排版，卡片的排版方式由服务端进行控制。 done （通过设置com/bytedance/feedapp/constants/StringsConstants.kt下的DEFAULT_FEED_TIEM_LAYOUT变量来实现）
+- 支持排版方式混排，每张卡片均可对排版方式进行控制，可选择单列或双列排版，卡片的排版方式由服务端进行控制。 done （添加了切换单双列按钮）
 - 实现卡片曝光事件（一种精准的、卡片在列表中露出时的事件回调） done（取消MainActivity.kt下的ExposureTestTool(testExposureCallback = exposureCallback)代码开启测试）
