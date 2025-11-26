@@ -1,7 +1,5 @@
 package com.bytedance.feedapp.model
 
-import com.bytedance.feedapp.constants.StringsConstants
-
 /**
  * 定义信息流中所有项目类型的基类。
  * 这是一个密封类，确保了在处理不同类型的卡片时可以进行详尽的编译时检查。
@@ -21,13 +19,13 @@ sealed class FeedItem {
  * @property id 唯一标识符。
  * @property text 显示的文本内容。
  * @property type 项目类型，默认为 "text"。
- * @property layout 排版方式，默认为 "single_column"。
+ * @property layout 排版方式。
  */
 data class TextFeedItem(
     override val id: String,
     val text: String,
     override val type: String = "text",
-    override val layout: String = StringsConstants.FEEDITEM_SINGLE_COLUMN
+    override val layout: String
 ) : FeedItem()
 
 /**
@@ -37,14 +35,14 @@ data class TextFeedItem(
  * @property imageUrl 图片的 URL。
  * @property text 图片附带的文本。
  * @property type 项目类型，默认为 "image"。
- * @property layout 排版方式，默认为 "single_column"。
+ * @property layout 排版方式。
  */
 data class ImageFeedItem(
     override val id: String,
     val imageUrl: String,
     val text: String,
     override val type: String = "image",
-    override val layout: String = StringsConstants.FEEDITEM_SINGLE_COLUMN
+    override val layout: String
 ) : FeedItem()
 
 /**
@@ -54,14 +52,14 @@ data class ImageFeedItem(
  * @property videoUrl 视频的 URL。
  * @property text 视频附带的文本。
  * @property type 项目类型，默认为 "video"。
- * @property layout 排版方式，默认为 "single_column"。
+ * @property layout 排版方式。
  */
 data class VideoFeedItem(
     override val id: String,
     val videoUrl: String,
     val text: String,
     override val type: String = "video",
-    override val layout: String = StringsConstants.FEEDITEM_SINGLE_COLUMN
+    override val layout: String
 ) : FeedItem()
 
 /**
@@ -72,7 +70,7 @@ data class VideoFeedItem(
  * @property name 产品名称。
  * @property price 产品价格。
  * @property type 项目类型，默认为 "product"。
- * @property layout 排版方式，默认为 "single_column"。
+ * @property layout 排版方式。
  */
 data class ProductFeedItem(
     override val id: String,
@@ -80,18 +78,5 @@ data class ProductFeedItem(
     val name: String,
     val price: String,
     override val type: String = "product",
-    override val layout: String = StringsConstants.FEEDITEM_SINGLE_COLUMN
-) : FeedItem()
-
-/**
- * 用于显示“正在加载”状态的占位符项目。
- *
- * @property id 唯一标识符，默认为 "-1"。
- * @property type 项目类型，默认为 "loading"。
- * @property layout 排版方式，默认为 "single_column"。
- */
-data class LoadingFeedItem(
-    override val id: String = "-1",
-    override val type: String = "loading",
-    override val layout: String = StringsConstants.FEEDITEM_SINGLE_COLUMN
+    override val layout: String
 ) : FeedItem()

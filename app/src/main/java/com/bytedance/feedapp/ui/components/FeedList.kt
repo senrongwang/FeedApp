@@ -36,6 +36,7 @@ import com.bytedance.feedapp.model.FeedItem
  * @param onLoadMore 当列表滚动到底部时调用的回调函数。
  * @param onDeleteItem 当用户长按某个信息流项目时调用的回调函数。
  * @param exposureCallback 曝光事件回调
+ * @param isSingleColumn 是否为单列布局
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,7 +48,8 @@ fun FeedList(
     hasMoreData: Boolean,
     onLoadMore: () -> Unit,
     onDeleteItem: (FeedItem) -> Unit,
-    exposureCallback: ExposureCallback
+    exposureCallback: ExposureCallback,
+    isSingleColumn: Boolean
 ) {
     // 创建并记住一个下拉刷新的状态控制器。
     val state = rememberPullToRefreshState()
@@ -81,12 +83,19 @@ fun FeedList(
                 }
             }
     }
+    
+    // 根据布局模式筛选数据
+    val filteredItems = if (isSingleColumn) {
+        feedItems.filter { it.layout == StringsConstants.FEEDITEM_SINGLE_COLUMN }
+    } else {
+        feedItems.filter { it.layout != StringsConstants.FEEDITEM_SINGLE_COLUMN}
+    }
 
     // `Box` 容器应用 `nestedScroll` 连接，以将滚动事件传递给下拉刷新状态。
     Box(Modifier.nestedScroll(state.nestedScrollConnection)) {
         // 使用 `LazyVerticalStaggeredGrid` 来实现瀑布流布局
         LazyVerticalStaggeredGrid(
-            columns = StaggeredGridCells.Fixed(2),
+            columns = if (isSingleColumn) StaggeredGridCells.Fixed(1) else StaggeredGridCells.Fixed(2),
             state = gridState,
             modifier = Modifier
                 .fillMaxSize()
@@ -94,7 +103,7 @@ fun FeedList(
             horizontalArrangement = Arrangement.spacedBy(1.dp),
             verticalItemSpacing = 1.dp
         ) {
-            items(feedItems, key = { it.id }, span = { item ->
+            items(filteredItems, key = { it.id }, span = { item ->
                 if (item.layout == StringsConstants.FEEDITEM_SINGLE_COLUMN) {
                     StaggeredGridItemSpan.FullLine
                 } else {

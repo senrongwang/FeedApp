@@ -140,10 +140,6 @@ class FeedItemDeserializer : JsonDeserializer<FeedItem> {
         val jsonObject = json.asJsonObject
         val type = jsonObject.get("type").asString
 
-        if (!jsonObject.has("layout")) {
-            jsonObject.addProperty("layout", StringsConstants.DEFAULT_FEED_TIEM_LAYOUT)
-        }
-
         return when (type) {
             "text" -> context.deserialize(jsonObject, TextFeedItem::class.java)
             "image" -> context.deserialize(jsonObject, ImageFeedItem::class.java)
