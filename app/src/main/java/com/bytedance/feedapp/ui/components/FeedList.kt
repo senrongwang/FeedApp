@@ -37,6 +37,7 @@ import com.bytedance.feedapp.model.FeedItem
  * @param onDeleteItem 当用户长按某个信息流项目时调用的回调函数。
  * @param exposureCallback 曝光事件回调
  * @param isSingleColumn 是否为单列布局
+ * @param playingCardId 当前正在播放的视频卡片的ID，可为空。
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,7 +50,8 @@ fun FeedList(
     onLoadMore: () -> Unit,
     onDeleteItem: (FeedItem) -> Unit,
     exposureCallback: ExposureCallback,
-    isSingleColumn: Boolean
+    isSingleColumn: Boolean,
+    playingCardId: Any? = null
 ) {
     // 创建并记住一个下拉刷新的状态控制器。
     val state = rememberPullToRefreshState()
@@ -83,7 +85,7 @@ fun FeedList(
                 }
             }
     }
-    
+
     // 根据布局模式筛选数据
     val filteredItems = if (isSingleColumn) {
         feedItems.filter { it.layout == StringsConstants.FEEDITEM_SINGLE_COLUMN }
@@ -111,10 +113,10 @@ fun FeedList(
                 }
             }) { item ->
                 // 从 `CardRegistry` 中获取与信息流项目类型对应的 Composable 函数，并调用它来渲染卡片。
-                CardRegistry.getCard(item.type)?.invoke(item, onDeleteItem)
+                CardRegistry.getCard(item.type)?.invoke(item, onDeleteItem, playingCardId)
 
                 TrackCardExposure(
-                    gridState = gridState, 
+                    gridState = gridState,
                     cardId = item.id,
                     callback = exposureCallback
                 )

@@ -17,7 +17,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,6 +66,8 @@ interface ExposureCallback {
 /**
  * [ExposureCallback] 的一个简单测试实现，用于记录曝光事件并将其存储以供显示。
  * 这对于调试和测试很有用。
+ *
+ * 这个类现在还包括了管理视频播放状态的逻辑。
  */
 class TestExposureCallback : ExposureCallback {
     /**
@@ -71,11 +76,38 @@ class TestExposureCallback : ExposureCallback {
      */
     val exposureState = mutableStateMapOf<Any, ExposureStatus>()
 
+    /**
+     * 当前正在播放的视频卡的ID。
+     * `mutableStateOf` 确保当这个值改变时，使用它的 Composable 会被重组。
+     * setter 是私有的，因此只能在这个类内部修改播放状态。
+     */
+    var playingCardId by mutableStateOf<Any?>(null)
+        private set
+
     override fun onExposureStateChanged(cardId: Any, status: ExposureStatus) {
         Log.d(TAG, "Card $cardId - status: $status")
         exposureState[cardId] = status
+
+        // 这是一个为单列视频流设计的简化逻辑。
+        // 它假定一次只有一个视频卡可以处于“播放”状态。
+
+        // 当视频至少有50%可见时，它应该开始播放。
+        if (status == ExposureStatus.VISIBLE_50_PERCENT || status == ExposureStatus.FULLY_VISIBLE) {
+            // 如果一个不同的视频已经在播放，这个新的视频将接管。
+            if (playingCardId != cardId) {
+                Log.d(TAG, "New video to play: $cardId. Current was: $playingCardId")
+                playingCardId = cardId
+            }
+        } else {
+            // 如果视频不再充分可见，它应该停止播放。
+            if (playingCardId == cardId) {
+                Log.d(TAG, "Stopping video: $cardId")
+                playingCardId = null
+            }
+        }
     }
 }
+
 
 /**
  * 一个可组合函数，用于跟踪 [LazyStaggeredGridState] 中特定项目的曝光情况。

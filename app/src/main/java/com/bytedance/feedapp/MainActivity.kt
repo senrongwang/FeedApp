@@ -15,7 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.GridView // 网格图标
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -67,24 +66,30 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun registerCardViews() {
-        CardRegistry.registerCard("text") { item, onLongPress ->
+        CardRegistry.registerCard("text") { item, onLongPress, _ ->
             if (item is TextFeedItem) {
-                TextCard(item = item, onLongPress = onLongPress)
+                TextCard(item = item, onLongPress = { onLongPress(it) })
             }
         }
-        CardRegistry.registerCard("image") { item, onLongPress ->
+        CardRegistry.registerCard("image") { item, onLongPress, _ ->
             if (item is ImageFeedItem) {
-                ImageCard(item = item, onLongPress = onLongPress)
+                ImageCard(item = item, onLongPress = { onLongPress(it) })
             }
         }
-        CardRegistry.registerCard("video") { item, onLongPress ->
+        // 更新 "video" 卡片的注册，以接受 playingCardId
+        // 并将 isPlaying 参数传递给 VideoCard
+        CardRegistry.registerCard("video") { item, onLongPress, playingCardId ->
             if (item is VideoFeedItem) {
-                VideoCard(item = item, onLongPress = onLongPress)
+                VideoCard(
+                    item = item,
+                    onLongPress = { onLongPress(it) },
+                    isPlaying = item.id == playingCardId
+                )
             }
         }
-        CardRegistry.registerCard("product") { item, onLongPress ->
+        CardRegistry.registerCard("product") { item, onLongPress, _ ->
             if (item is ProductFeedItem) {
-                ProductCard(item = item, onLongPress = onLongPress)
+                ProductCard(item = item, onLongPress = { onLongPress(it) })
             }
         }
     }
@@ -108,6 +113,7 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column {
+            // 搜索框
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -118,7 +124,9 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
                     SearchBar(searchText = searchText, onSearchTextChange = { searchText = it })
                 }
             }
+            // 不同状态栏
             FeedTabs(selectedTabIndex = selectedTabIndex, onTabClick = { index -> feedViewModel.onTabSelected(index) })
+            // 切换单列双列布局按钮
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
@@ -127,6 +135,7 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
                     Icon(imageVector = if (isSingleColumn) Icons.AutoMirrored.Filled.List else Icons.Default.GridView, contentDescription = "Switch Layout")
                 }
             }
+            // 卡片列表
             FeedList(
                 feedItems = feedItems,
                 isRefreshing = isRefreshing,
@@ -136,7 +145,9 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
                 onLoadMore = { feedViewModel.loadMoreFeedItems() },
                 onDeleteItem = { item -> feedViewModel.onDeleteItem(item) },
                 exposureCallback = exposureCallback,
-                isSingleColumn = isSingleColumn
+                isSingleColumn = isSingleColumn,
+                // 传递当前播放的视频ID
+                playingCardId = exposureCallback.playingCardId
             )
         }
 
@@ -178,7 +189,7 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
             }
         }
         // 在屏幕上显示曝光测试工具
-        ExposureTestTool(testExposureCallback = exposureCallback)
+//        ExposureTestTool(testExposureCallback = exposureCallback)
     }
 }
 
