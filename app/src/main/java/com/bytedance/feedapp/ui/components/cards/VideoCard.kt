@@ -22,6 +22,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bytedance.feedapp.constants.IntegersConstants
 import com.bytedance.feedapp.model.VideoFeedItem
 import kotlinx.coroutines.delay
 
@@ -35,7 +36,7 @@ import kotlinx.coroutines.delay
  */
 @Composable
 fun VideoCard(item: VideoFeedItem, onLongPress: (VideoFeedItem) -> Unit, isPlaying: Boolean) {
-    var countdown by remember { mutableStateOf(5) }
+    var countdown by remember { mutableStateOf(IntegersConstants.AUTOPLAY_COUNT_DOWN) }
 
     // 当这个视频卡是正在播放的视频时，启动一个倒计时。
     // 这是一个模拟真实视频播放的简化方案。
@@ -43,7 +44,7 @@ fun VideoCard(item: VideoFeedItem, onLongPress: (VideoFeedItem) -> Unit, isPlayi
         // `LaunchedEffect` 用于在 Composable 的生命周期内运行挂起函数。
         // 当 `isPlaying` 或 `item.id` 改变时，这个 effect 会重新启动。
         androidx.compose.runtime.LaunchedEffect(key1 = isPlaying, key2 = item.id) {
-            countdown = 5
+//            countdown = 5
             while (countdown > 0) {
                 delay(1000)
                 countdown--
