@@ -10,5 +10,9 @@ object IntegersConstants {
     /** 提示信息在屏幕上显示的持续时间（毫秒）。*/
     const val SUCCESS_MESSAGE_DELAY = 1000L
 
+    /** 错误信息在屏幕上显示的持续时间（毫秒）。*/
     const val ERROR_MESSAGE_DELAY = 2000L
+
+    /** 模拟自动播放视频的倒计时（秒）。*/
+    const val AUTOPLAY_COUNT_DOWN = 5
 }
