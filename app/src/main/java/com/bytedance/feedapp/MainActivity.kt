@@ -67,6 +67,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun registerCardViews() {
+        // 通过 CardRegistry 注册卡片
         CardRegistry.registerCard("text") { item, onLongPress, _ ->
             if (item is TextFeedItem) {
                 TextCard(item = item, onLongPress = { onLongPress(it) })
@@ -113,7 +114,7 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
     val exposureCallback = remember { TestExposureCallback() }
 
     // 功能开关：设置为 true 以显示曝光测试工具，设置为 false 以隐藏它
-    val showExposureTestTool = true
+    val showExposureTestTool = false
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column {
