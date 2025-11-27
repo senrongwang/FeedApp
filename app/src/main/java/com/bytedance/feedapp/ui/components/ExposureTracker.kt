@@ -59,8 +59,9 @@ interface ExposureCallback {
      * 当卡片的曝光状态更改时调用。
      * @param cardId 卡片的唯一标识符。
      * @param status 新的曝光状态。
+     * @param gridState 列表的状态，用于获取其他项目的信息。
      */
-    fun onExposureStateChanged(cardId: Any, status: ExposureStatus)
+    fun onExposureStateChanged(cardId: Any, status: ExposureStatus, gridState: LazyStaggeredGridState)
 }
 
 /**
@@ -84,26 +85,32 @@ class TestExposureCallback : ExposureCallback {
     var playingCardId by mutableStateOf<Any?>(null)
         private set
 
-    override fun onExposureStateChanged(cardId: Any, status: ExposureStatus) {
+    override fun onExposureStateChanged(cardId: Any, status: ExposureStatus, gridState: LazyStaggeredGridState) {
         Log.d(TAG, "Card $cardId - status: $status")
         exposureState[cardId] = status
 
-        // 这是一个为单列视频流设计的简化逻辑。
-        // 它假定一次只有一个视频卡可以处于“播放”状态。
+        // 找出所有状态为“完全可见”的卡片
+        val fullyVisibleCardIds = exposureState.filter { it.value == ExposureStatus.FULLY_VISIBLE }.keys
 
-        // 当视频至少有50%可见时，它应该开始播放。
-        if (status == ExposureStatus.VISIBLE_50_PERCENT || status == ExposureStatus.FULLY_VISIBLE) {
-            // 如果一个不同的视频已经在播放，这个新的视频将接管。
-            if (playingCardId != cardId) {
-                Log.d(TAG, "New video to play: $cardId. Current was: $playingCardId")
-                playingCardId = cardId
-            }
-        } else {
-            // 如果视频不再充分可见，它应该停止播放。
-            if (playingCardId == cardId) {
-                Log.d(TAG, "Stopping video: $cardId")
+        // 如果没有完全可见的卡片，则停止播放
+        if (fullyVisibleCardIds.isEmpty()) {
+            if (playingCardId != null) {
+                Log.d(TAG, "No fully visible cards. Stopping playback.")
                 playingCardId = null
             }
+            return
+        }
+
+        // 从所有可见项中，找到最顶部的“完全可见”卡片
+        val topCardToPlay = gridState.layoutInfo.visibleItemsInfo
+            .filter { it.key in fullyVisibleCardIds } // 仅考虑完全可见的卡片
+            .minByOrNull { it.offset.y } // 找到Y轴坐标最小的（最顶部的）
+
+        // 更新当前播放的卡片ID
+        val newPlayingCardId = topCardToPlay?.key
+        if (playingCardId != newPlayingCardId) {
+            Log.d(TAG, "Switching video playback. Old: $playingCardId, New: $newPlayingCardId")
+            playingCardId = newPlayingCardId
         }
     }
 }
@@ -142,7 +149,8 @@ fun TrackCardExposure(
             }
             .distinctUntilChanged()
             .collect { newStatus ->
-                callback.onExposureStateChanged(cardId, newStatus)
+                // 在回调中传递 gridState
+                callback.onExposureStateChanged(cardId, newStatus, gridState)
             }
     }
 }

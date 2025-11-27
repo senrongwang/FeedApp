@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bytedance.feedapp.constants.IntegersConstants
 import com.bytedance.feedapp.constants.StringsConstants
 import com.bytedance.feedapp.model.ImageFeedItem
 import com.bytedance.feedapp.model.ProductFeedItem
@@ -111,6 +112,9 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
 
     val exposureCallback = remember { TestExposureCallback() }
 
+    // 功能开关：设置为 true 以显示曝光测试工具，设置为 false 以隐藏它
+    val showExposureTestTool = true
+
     Box(modifier = Modifier.fillMaxSize()) {
         Column {
             // 搜索框
@@ -177,7 +181,7 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
             var snackbarVisible by remember { mutableStateOf(true) }
             LaunchedEffect(errorMessage) {
                 snackbarVisible = true
-                delay(2000) // 2秒后自动消失
+                delay(IntegersConstants.ERROR_MESSAGE_DELAY) // 2秒后自动消失
                 snackbarVisible = false
             }
             if (snackbarVisible) {
@@ -189,7 +193,9 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
             }
         }
         // 在屏幕上显示曝光测试工具
-//        ExposureTestTool(testExposureCallback = exposureCallback)
+        if (showExposureTestTool) {
+            ExposureTestTool(testExposureCallback = exposureCallback)
+        }
     }
 }
 

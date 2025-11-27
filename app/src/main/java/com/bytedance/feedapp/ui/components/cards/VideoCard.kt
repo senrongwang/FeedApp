@@ -56,9 +56,9 @@ fun VideoCard(item: VideoFeedItem, onLongPress: (VideoFeedItem) -> Unit, isPlayi
             .padding(8.dp)
             .fillMaxWidth()
             .pointerInput(Unit) {
-                detectTapGestures {
-                    onLongPress(item)
-                }
+                detectTapGestures(
+                    onLongPress = { onLongPress(item) }
+                )
             }
     ) {
         Column {
