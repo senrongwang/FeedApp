@@ -11,53 +11,80 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.bytedance.feedapp.model.VideoFeedItem
+import kotlinx.coroutines.delay
+
 
 /**
  * `VideoCard` 是一个 Composable 函数，用于显示视频信息流项目。
  *
  * @param item 要显示的 `VideoFeedItem` 数据。
  * @param onLongPress 用户长按卡片时调用的回调函数。
+ * @param isPlaying 表示视频当前是否正在播放的布尔值。
  */
 @Composable
-fun VideoCard(item: VideoFeedItem, onLongPress: (VideoFeedItem) -> Unit) {
-    // `Card` 可组合项为视频信息流项目提供了一个 Material Design 卡片容器。
+fun VideoCard(item: VideoFeedItem, onLongPress: (VideoFeedItem) -> Unit, isPlaying: Boolean) {
+    var countdown by remember { mutableStateOf(5) }
+
+    // 当这个视频卡是正在播放的视频时，启动一个倒计时。
+    // 这是一个模拟真实视频播放的简化方案。
+    if (isPlaying) {
+        // `LaunchedEffect` 用于在 Composable 的生命周期内运行挂起函数。
+        // 当 `isPlaying` 或 `item.id` 改变时，这个 effect 会重新启动。
+        androidx.compose.runtime.LaunchedEffect(key1 = isPlaying, key2 = item.id) {
+            countdown = 5
+            while (countdown > 0) {
+                delay(1000)
+                countdown--
+            }
+        }
+    }
+
     Card(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()
             .pointerInput(Unit) {
-                detectTapGestures(
-                    onLongPress = {
-                        onLongPress(item)
-                    }
-                )
+                detectTapGestures {
+                    onLongPress(item)
+                }
             }
     ) {
-        // `Column` 可组合项垂直排列其子项。
         Column {
-            // `Box` 可组合项用作视频预览的占位符。
             Box(
                 modifier = Modifier
-                    .fillMaxWidth() // 填充父项的整个宽度。
-                    .height(200.dp) // 设置一个固定的高度。
-                    .background(Color.Black), // 设置一个黑色背景。
-                contentAlignment = Alignment.Center // 将子项在 `Box` 内居中对齐。
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .background(Color.Black),
+                contentAlignment = Alignment.Center
             ) {
-                // `Icon` 可组合项显示一个播放图标，表示这是一个视频。
-                Icon(
-                    painter = painterResource(id = android.R.drawable.ic_media_play), // 使用安卓内置的播放图标。
-                    contentDescription = "Play Video", // 为无障碍功能提供描述。
-                    tint = Color.White // 将图标颜色设置为白色，以便在黑色背景上可见。
-                )
+                if (isPlaying) {
+                    // 如果视频正在播放，显示倒计时。
+                    Text(
+                        text = "模拟播放中: $countdown s",
+                        color = Color.White,
+                        fontSize = 24.sp
+                    )
+                } else {
+                    // 如果视频未播放，显示播放图标。
+                    Icon(
+                        painter = painterResource(id = android.R.drawable.ic_media_play),
+                        contentDescription = "Play Video",
+                        tint = Color.White
+                    )
+                }
             }
-            // `Text` 可组合项显示视频的附带文本。
             Text(text = item.text, modifier = Modifier.padding(16.dp))
         }
     }
