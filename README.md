@@ -13,3 +13,41 @@
   网络请求失败时，读取缓存中的feed_cache_data.json进行显示。
 - 实现视频的自动播放与停止播放。<br>
   使用倒计时显示来模拟播放器，首先播放完整显示并且最靠上的视频。
+
+架构
+com.bytedance.feedapp
+├── constants
+│   └── AppConstants.kt           <-- 全局常量 (整合了原 String/Integer 常量)
+├── data
+│   └── MockRepo.kt               <-- 数据仓库 (负责网络模拟与本地缓存)
+├── model
+│   └── FeedItem.kt               <-- 数据实体模型 (Gson 解析对象)
+├── ui
+│   ├── activity                  <-- 页面容器
+│   │   ├── MainActivity.kt
+│   │   └── SplashActivity.kt
+│   ├── components                <-- UI 视图组件层
+│   │   ├── cards                 <-- 具体业务卡片 UI
+│   │   │   ├── ImageCard.kt
+│   │   │   ├── ProductCard.kt
+│   │   │   ├── TextCard.kt
+│   │   │   └── VideoCard.kt
+│   │   ├── common                <-- 通用/无业务逻辑组件
+│   │   │   └── SearchBar.kt
+│   │   ├── dialogs               <-- 弹窗组件
+│   │   │   └── DeleteConfirmationDialog.kt
+│   │   └── feed                  <-- 业务核心组件 (强耦合业务逻辑)
+│   │       ├── FeedList.kt
+│   │       └── FeedTabs.kt
+│   ├── debug                     <-- 调试专用工具 (可分离)
+│   │   └── ExposureDebugOverlay.kt
+│   ├── helper                    <-- 逻辑与状态辅助 (非 UI)
+│   │   ├── CardRegistry.kt       <-- 卡片工厂/注册表
+│   │   ├── FeedExposureUtils.kt  <-- 曝光计算纯逻辑
+│   │   └── FeedPlaybackManager.kt<-- 自动播放业务状态管理
+│   └── theme                     <-- Compose 主题样式
+│       ├── Color.kt
+│       ├── Theme.kt
+│       └── Type.kt
+└── viewmodel
+    └── FeedViewModel.kt          <-- 状态持有者 (MVVM 核心)
