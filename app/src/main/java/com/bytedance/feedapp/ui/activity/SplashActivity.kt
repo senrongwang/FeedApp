@@ -23,8 +23,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.bytedance.feedapp.constants.AppConstants
 import com.bytedance.feedapp.ui.activity.MainActivity
-import com.bytedance.feedapp.constants.IntegersConstants
 import com.bytedance.feedapp.ui.theme.FeedAppTheme
 import com.bytedance.feedapp.ui.theme.GeminiBlueEnd
 import com.bytedance.feedapp.ui.theme.GeminiBlueStart
@@ -52,7 +52,7 @@ class SplashActivity : AppCompatActivity() {
         }
 
         CoroutineScope(Dispatchers.Main).launch {
-            delay(IntegersConstants.REFRESH_DELAY)
+            delay(AppConstants.REFRESH_DELAY)
             startActivity(Intent(this@SplashActivity, MainActivity::class.java))
             finish()
         }

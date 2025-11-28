@@ -4,8 +4,7 @@ import android.app.Application
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.bytedance.feedapp.constants.IntegersConstants
-import com.bytedance.feedapp.constants.StringsConstants
+import com.bytedance.feedapp.constants.AppConstants
 import com.bytedance.feedapp.data.MockRepo
 import com.bytedance.feedapp.model.FeedItem
 import kotlinx.coroutines.delay
@@ -46,7 +45,7 @@ class FeedViewModel(application: Application) : AndroidViewModel(application) {
     /** 当用户切换标签页时调用。*/
     fun onTabSelected(index: Int) {
         selectedTabIndex.value = index
-        fetchInitialFeedItems(StringsConstants.TABS[index])
+        fetchInitialFeedItems(AppConstants.TABS[index])
     }
 
     /** 执行下拉刷新操作。*/
@@ -56,12 +55,12 @@ class FeedViewModel(application: Application) : AndroidViewModel(application) {
             showErrorMessage.value = null // 清除旧的错误信息
             try {
                 MockRepo.loadAndParseFeedData(getApplication())
-                fetchInitialFeedItems(StringsConstants.TABS[selectedTabIndex.value])
+                fetchInitialFeedItems(AppConstants.TABS[selectedTabIndex.value])
                 showSuccessMessage.value = true
-                delay(IntegersConstants.SUCCESS_MESSAGE_DELAY)
+                delay(AppConstants.SUCCESS_MESSAGE_DELAY)
                 showSuccessMessage.value = false
             } catch (e: IOException) {
-                showErrorMessage.value = StringsConstants.NETWORK_ERROR_MESSAGE
+                showErrorMessage.value = AppConstants.NETWORK_ERROR_MESSAGE
             }
             isRefreshing.value = false
         }
@@ -73,10 +72,10 @@ class FeedViewModel(application: Application) : AndroidViewModel(application) {
         isLoadingMore.value = true
         viewModelScope.launch {
             currentPage++
-            delay(IntegersConstants.REFRESH_DELAY)
+            delay(AppConstants.REFRESH_DELAY)
 
             // 从内存中获取下一页数据
-            val newItems = MockRepo.getFeedItemsForTab(StringsConstants.TABS[selectedTabIndex.value], currentPage, pageSize)
+            val newItems = MockRepo.getFeedItemsForTab(AppConstants.TABS[selectedTabIndex.value], currentPage, pageSize)
 
             if (newItems.isNotEmpty()) {
                 val currentItems = feedItems.value
@@ -100,7 +99,7 @@ class FeedViewModel(application: Application) : AndroidViewModel(application) {
     fun confirmDeleteItem() {
         itemToDelete.value?.let { itemToRemove ->
             // 从数据源和UI列表中同时移除
-            MockRepo.deleteFeedItem(itemToRemove, StringsConstants.TABS[selectedTabIndex.value])
+            MockRepo.deleteFeedItem(itemToRemove, AppConstants.TABS[selectedTabIndex.value])
             feedItems.value = feedItems.value.filter { it.id != itemToRemove.id }
         }
         resetDeleteState()
@@ -129,9 +128,9 @@ class FeedViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             try {
                 MockRepo.loadAndParseFeedData(getApplication())
-                fetchInitialFeedItems(StringsConstants.TABS[selectedTabIndex.value])
+                fetchInitialFeedItems(AppConstants.TABS[selectedTabIndex.value])
             } catch (e: IOException) {
-                showErrorMessage.value = StringsConstants.NETWORK_ERROR_MESSAGE
+                showErrorMessage.value = AppConstants.NETWORK_ERROR_MESSAGE
             }
         }
     }

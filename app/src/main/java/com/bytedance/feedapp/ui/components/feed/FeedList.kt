@@ -22,7 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import com.bytedance.feedapp.constants.StringsConstants
+import com.bytedance.feedapp.constants.AppConstants
 import com.bytedance.feedapp.model.FeedItem
 import com.bytedance.feedapp.ui.helper.CardRegistry
 import com.bytedance.feedapp.ui.helper.ExposureCallback
@@ -91,9 +91,9 @@ fun FeedList(
 
     // 根据布局模式筛选数据
     val filteredItems = if (isSingleColumn) {
-        feedItems.filter { it.layout == StringsConstants.FEEDITEM_SINGLE_COLUMN }
+        feedItems.filter { it.layout == AppConstants.FEEDITEM_SINGLE_COLUMN }
     } else {
-        feedItems.filter { it.layout != StringsConstants.FEEDITEM_SINGLE_COLUMN}
+        feedItems.filter { it.layout != AppConstants.FEEDITEM_SINGLE_COLUMN}
     }
 
     // `Box` 容器应用 `nestedScroll` 连接，以将滚动事件传递给下拉刷新状态。
@@ -111,7 +111,7 @@ fun FeedList(
             verticalItemSpacing = 1.dp
         ) {
             items(filteredItems, key = { it.id }, span = { item ->
-                if (item.layout == StringsConstants.FEEDITEM_SINGLE_COLUMN) {
+                if (item.layout == AppConstants.FEEDITEM_SINGLE_COLUMN) {
                     StaggeredGridItemSpan.FullLine
                 } else {
                     StaggeredGridItemSpan.SingleLane
@@ -172,6 +172,6 @@ private fun NoMoreDataIndicator() {
             .padding(16.dp),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = StringsConstants.NO_MORE_DATA)
+        Text(text = AppConstants.NO_MORE_DATA)
     }
 }

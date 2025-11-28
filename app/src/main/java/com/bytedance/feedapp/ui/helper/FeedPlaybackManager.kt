@@ -6,9 +6,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.bytedance.feedapp.constants.StringsConstants
+import com.bytedance.feedapp.constants.AppConstants
 
-private const val TAG = StringsConstants.EXPOSURE_TRACKER_TAG
+private const val TAG = AppConstants.EXPOSURE_TRACKER_TAG
 
 /**
  * 视频播放管理器 (原 TestExposureCallback)

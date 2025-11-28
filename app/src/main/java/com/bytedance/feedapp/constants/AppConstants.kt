@@ -1,9 +1,9 @@
 package com.bytedance.feedapp.constants
 
 /**
- * 存放应用中使用的字符串常量，便于管理和国际化。
+ * 存放应用中使用的常量，便于管理。
  */
-object StringsConstants {
+object AppConstants {
     // --- 搜索栏 ---
     const val SEARCH_TEXT_PLACEHOLDER = "点击输入搜索内容"
     const val BACK_BUTTON_CONTENT_DESCRIPTION = "Back"
@@ -36,4 +36,15 @@ object StringsConstants {
     // --- 网络错误消息 --
     const val NETWORK_ERROR_MESSAGE = "网络加载失败"
 
+    /** 模拟加载操作的延迟时间（毫秒）。*/
+    const val REFRESH_DELAY = 1000L
+
+    /** 提示信息在屏幕上显示的持续时间（毫秒）。*/
+    const val SUCCESS_MESSAGE_DELAY = 1000L
+
+    /** 错误信息在屏幕上显示的持续时间（毫秒）。*/
+    const val ERROR_MESSAGE_DELAY = 2000L
+
+    /** 模拟自动播放视频的倒计时（秒）。*/
+    const val AUTOPLAY_COUNT_DOWN = 5
 }

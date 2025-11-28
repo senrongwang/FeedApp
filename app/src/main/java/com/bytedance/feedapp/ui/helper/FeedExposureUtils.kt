@@ -7,13 +7,13 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
-import com.bytedance.feedapp.constants.StringsConstants
+import com.bytedance.feedapp.constants.AppConstants
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlin.math.max
 import kotlin.math.min
 
-private const val TAG = StringsConstants.EXPOSURE_TRACKER_TAG
+private const val TAG = AppConstants.EXPOSURE_TRACKER_TAG
 
 /**
  * 曝光状态枚举

@@ -2,7 +2,7 @@ package com.bytedance.feedapp.data
 
 import android.content.Context
 import android.util.Log
-import com.bytedance.feedapp.constants.StringsConstants
+import com.bytedance.feedapp.constants.AppConstants
 import com.bytedance.feedapp.model.FeedItem
 import com.bytedance.feedapp.model.ImageFeedItem
 import com.bytedance.feedapp.model.ProductFeedItem
@@ -49,7 +49,7 @@ object MockRepo {
             networkJson
         } catch (e: IOException) {
             // 网络请求失败时，从缓存加载，如果缓存也失败则抛出异常
-            loadFromCache(context) ?: throw IOException(StringsConstants.NETWORK_ERROR_MESSAGE)
+            loadFromCache(context) ?: throw IOException(AppConstants.NETWORK_ERROR_MESSAGE)
         }
 
         // 清除旧数据并解析新数据

@@ -32,8 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.bytedance.feedapp.constants.IntegersConstants
-import com.bytedance.feedapp.constants.StringsConstants
+import com.bytedance.feedapp.constants.AppConstants
 import com.bytedance.feedapp.model.ImageFeedItem
 import com.bytedance.feedapp.model.ProductFeedItem
 import com.bytedance.feedapp.model.TextFeedItem
@@ -108,7 +107,7 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
     val hasMoreData by feedViewModel.hasMoreData
     val showDeleteConfirmationDialog by feedViewModel.showDeleteConfirmationDialog
 
-    var searchText by remember { mutableStateOf(StringsConstants.SEARCH_TEXT_PLACEHOLDER) }
+    var searchText by remember { mutableStateOf(AppConstants.SEARCH_TEXT_PLACEHOLDER) }
     var isSingleColumn by remember { mutableStateOf(true) }
 
     val playbackManager = remember { FeedPlaybackManager() }
@@ -170,7 +169,7 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
 
         if (showSuccessMessage) {
             Text(
-                text = StringsConstants.REFRESH_INFO,
+                text = AppConstants.REFRESH_INFO,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(16.dp)
@@ -187,7 +186,7 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
             var snackbarVisible by remember { mutableStateOf(true) }
             LaunchedEffect(errorMessage) {
                 snackbarVisible = true
-                delay(IntegersConstants.ERROR_MESSAGE_DELAY) // 2秒后自动消失
+                delay(AppConstants.ERROR_MESSAGE_DELAY) // 2秒后自动消失
                 snackbarVisible = false
             }
             if (snackbarVisible) {

@@ -4,14 +4,14 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import com.bytedance.feedapp.constants.StringsConstants
+import com.bytedance.feedapp.constants.AppConstants
 
 @Composable
 fun FeedTabs(
     selectedTabIndex: Int,
     onTabClick: (Int) -> Unit
 ) {
-    val tabs = StringsConstants.TABS
+    val tabs = AppConstants.TABS
     TabRow(selectedTabIndex = selectedTabIndex) {
         tabs.forEachIndexed { index, title ->
             Tab(
