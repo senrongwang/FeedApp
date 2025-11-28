@@ -14,7 +14,7 @@
 - 实现视频的自动播放与停止播放。<br>
   使用倒计时显示来模拟播放器，首先播放完整显示并且最靠上的视频。
 
-架构
+架构<br>
 com.bytedance.feedapp<br>
 ├── constants<br>
 │   └── AppConstants.kt           <-- 全局常量 (整合了原 String/Integer 常量)<br>
