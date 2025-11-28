@@ -1,4 +1,4 @@
-package com.bytedance.feedapp.ui.components
+package com.bytedance.feedapp.ui.components.common
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,7 +31,10 @@ fun SearchBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(onClick = { /* Handle back press */ }) {
-            Icon(painter = painterResource(id = R.drawable.baseline_arrow_back_ios_24), contentDescription = StringsConstants.BACK_BUTTON_CONTENT_DESCRIPTION)
+            Icon(
+                painter = painterResource(id = R.drawable.baseline_arrow_back_ios_24),
+                contentDescription = StringsConstants.BACK_BUTTON_CONTENT_DESCRIPTION
+            )
         }
         OutlinedTextField(
             value = searchText,

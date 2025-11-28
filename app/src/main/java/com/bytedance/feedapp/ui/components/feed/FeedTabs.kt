@@ -1,4 +1,4 @@
-package com.bytedance.feedapp.ui.components
+package com.bytedance.feedapp.ui.components.feed
 
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow

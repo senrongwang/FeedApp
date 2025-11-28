@@ -49,7 +49,7 @@ fun TrackCardExposure(
                     ExposureStatus.DISAPPEARED
                 } else {
                     val visiblePercentage = calculateVisiblePercentage(itemInfo, layoutInfo)
-                    // Log.d(TAG, "cardId: $cardId, percentage: $visiblePercentage") // 根据需要开启日志
+                    Log.d(TAG, "cardId: $cardId, percentage: $visiblePercentage") // 根据需要开启日志
                     when {
                         visiblePercentage >= 1.0f -> ExposureStatus.FULLY_VISIBLE
                         visiblePercentage >= 0.5f -> ExposureStatus.VISIBLE_50_PERCENT

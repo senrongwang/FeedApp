@@ -40,9 +40,9 @@ import com.bytedance.feedapp.model.TextFeedItem
 import com.bytedance.feedapp.model.VideoFeedItem
 import com.bytedance.feedapp.ui.helper.CardRegistry
 import com.bytedance.feedapp.ui.debug.ExposureDebugOverlay
-import com.bytedance.feedapp.ui.components.FeedList
-import com.bytedance.feedapp.ui.components.FeedTabs
-import com.bytedance.feedapp.ui.components.SearchBar
+import com.bytedance.feedapp.ui.components.feed.FeedList
+import com.bytedance.feedapp.ui.components.feed.FeedTabs
+import com.bytedance.feedapp.ui.components.common.SearchBar
 import com.bytedance.feedapp.ui.helper.FeedPlaybackManager
 import com.bytedance.feedapp.ui.components.cards.ImageCard
 import com.bytedance.feedapp.ui.components.cards.ProductCard

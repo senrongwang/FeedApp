@@ -1,4 +1,4 @@
-package com.bytedance.feedapp.ui.components
+package com.bytedance.feedapp.ui.components.feed
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -100,7 +100,9 @@ fun FeedList(
     Box(Modifier.nestedScroll(state.nestedScrollConnection)) {
         // 使用 `LazyVerticalStaggeredGrid` 来实现瀑布流布局
         LazyVerticalStaggeredGrid(
-            columns = if (isSingleColumn) StaggeredGridCells.Fixed(1) else StaggeredGridCells.Fixed(2),
+            columns = if (isSingleColumn) StaggeredGridCells.Fixed(1) else StaggeredGridCells.Fixed(
+                2
+            ),
             state = gridState,
             modifier = Modifier
                 .fillMaxSize()

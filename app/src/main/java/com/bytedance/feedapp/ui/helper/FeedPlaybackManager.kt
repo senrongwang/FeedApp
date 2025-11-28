@@ -25,7 +25,7 @@ class FeedPlaybackManager : ExposureCallback {
         private set
 
     override fun onExposureStateChanged(cardId: Any, status: ExposureStatus, gridState: LazyStaggeredGridState) {
-        // Log.d(TAG, "Card $cardId - status: $status")
+        Log.d(TAG, "Card $cardId - status: $status")
         exposureState[cardId] = status
 
         // --- 核心自动播放策略 ---
