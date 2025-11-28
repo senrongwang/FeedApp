@@ -39,11 +39,11 @@ import com.bytedance.feedapp.model.ProductFeedItem
 import com.bytedance.feedapp.model.TextFeedItem
 import com.bytedance.feedapp.model.VideoFeedItem
 import com.bytedance.feedapp.ui.helper.CardRegistry
-import com.bytedance.feedapp.ui.components.ExposureTestTool
+import com.bytedance.feedapp.ui.debug.ExposureDebugOverlay
 import com.bytedance.feedapp.ui.components.FeedList
 import com.bytedance.feedapp.ui.components.FeedTabs
 import com.bytedance.feedapp.ui.components.SearchBar
-import com.bytedance.feedapp.ui.components.TestExposureCallback
+import com.bytedance.feedapp.ui.helper.FeedPlaybackManager
 import com.bytedance.feedapp.ui.components.cards.ImageCard
 import com.bytedance.feedapp.ui.components.cards.ProductCard
 import com.bytedance.feedapp.ui.components.cards.TextCard
@@ -111,21 +111,21 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
     var searchText by remember { mutableStateOf(StringsConstants.SEARCH_TEXT_PLACEHOLDER) }
     var isSingleColumn by remember { mutableStateOf(true) }
 
-    val exposureCallback = remember { TestExposureCallback() }
+    val playbackManager = remember { FeedPlaybackManager() }
 
     // 功能开关：设置为 true 以显示曝光测试工具，设置为 false 以隐藏它
-    val showExposureTestTool = false
+    val showExposureTestTool = true
 
-    Box(modifier = Modifier.Companion.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize()) {
         Column {
             // 搜索框
             Row(
-                modifier = Modifier.Companion
+                modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
-                verticalAlignment = Alignment.Companion.CenterVertically
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Box(modifier = Modifier.Companion.weight(1f)) {
+                Box(modifier = Modifier.weight(1f)) {
                     SearchBar(searchText = searchText, onSearchTextChange = { searchText = it })
                 }
             }
@@ -135,7 +135,7 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
                 onTabClick = { index -> feedViewModel.onTabSelected(index) })
             // 切换单列双列布局按钮
             Row(
-                modifier = Modifier.Companion.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
                 IconButton(onClick = { isSingleColumn = !isSingleColumn }) {
@@ -154,10 +154,10 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
                 hasMoreData = hasMoreData,
                 onLoadMore = { feedViewModel.loadMoreFeedItems() },
                 onDeleteItem = { item -> feedViewModel.onDeleteItem(item) },
-                exposureCallback = exposureCallback,
+                exposureCallback = playbackManager,
                 isSingleColumn = isSingleColumn,
                 // 传递当前播放的视频ID
-                playingCardId = exposureCallback.playingCardId
+                playingCardId = playbackManager.playingCardId
             )
         }
 
@@ -171,8 +171,8 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
         if (showSuccessMessage) {
             Text(
                 text = StringsConstants.REFRESH_INFO,
-                modifier = Modifier.Companion
-                    .align(Alignment.Companion.BottomCenter)
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
                     .padding(16.dp)
                     .background(
                         color = MaterialTheme.colorScheme.primaryContainer,
@@ -192,7 +192,7 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
             }
             if (snackbarVisible) {
                 Snackbar(
-                    modifier = Modifier.Companion.align(Alignment.Companion.BottomCenter)
+                    modifier = Modifier.align(Alignment.BottomCenter)
                         .padding(16.dp),
                 ) {
                     Text(text = msg)
@@ -201,7 +201,7 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
         }
         // 在屏幕上显示曝光测试工具
         if (showExposureTestTool) {
-            ExposureTestTool(testExposureCallback = exposureCallback)
+            ExposureDebugOverlay(playbackManager = playbackManager)
         }
     }
 }
