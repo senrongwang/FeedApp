@@ -1,4 +1,4 @@
-package com.bytedance.feedapp
+package com.bytedance.feedapp.ui.activity
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.GridView // 网格图标
+import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -38,7 +38,7 @@ import com.bytedance.feedapp.model.ImageFeedItem
 import com.bytedance.feedapp.model.ProductFeedItem
 import com.bytedance.feedapp.model.TextFeedItem
 import com.bytedance.feedapp.model.VideoFeedItem
-import com.bytedance.feedapp.ui.components.CardRegistry
+import com.bytedance.feedapp.ui.helper.CardRegistry
 import com.bytedance.feedapp.ui.components.ExposureTestTool
 import com.bytedance.feedapp.ui.components.FeedList
 import com.bytedance.feedapp.ui.components.FeedTabs
@@ -116,28 +116,33 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
     // 功能开关：设置为 true 以显示曝光测试工具，设置为 false 以隐藏它
     val showExposureTestTool = false
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.Companion.fillMaxSize()) {
         Column {
             // 搜索框
             Row(
-                modifier = Modifier
+                modifier = Modifier.Companion
                     .fillMaxWidth()
                     .padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.Companion.CenterVertically
             ) {
-                Box(modifier = Modifier.weight(1f)) {
+                Box(modifier = Modifier.Companion.weight(1f)) {
                     SearchBar(searchText = searchText, onSearchTextChange = { searchText = it })
                 }
             }
             // 不同状态栏
-            FeedTabs(selectedTabIndex = selectedTabIndex, onTabClick = { index -> feedViewModel.onTabSelected(index) })
+            FeedTabs(
+                selectedTabIndex = selectedTabIndex,
+                onTabClick = { index -> feedViewModel.onTabSelected(index) })
             // 切换单列双列布局按钮
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.Companion.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
                 IconButton(onClick = { isSingleColumn = !isSingleColumn }) {
-                    Icon(imageVector = if (isSingleColumn) Icons.AutoMirrored.Filled.List else Icons.Default.GridView, contentDescription = "Switch Layout")
+                    Icon(
+                        imageVector = if (isSingleColumn) Icons.AutoMirrored.Filled.List else Icons.Default.GridView,
+                        contentDescription = "Switch Layout"
+                    )
                 }
             }
             // 卡片列表
@@ -166,8 +171,8 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
         if (showSuccessMessage) {
             Text(
                 text = StringsConstants.REFRESH_INFO,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
+                modifier = Modifier.Companion
+                    .align(Alignment.Companion.BottomCenter)
                     .padding(16.dp)
                     .background(
                         color = MaterialTheme.colorScheme.primaryContainer,
@@ -187,7 +192,8 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
             }
             if (snackbarVisible) {
                 Snackbar(
-                    modifier = Modifier.align(Alignment.BottomCenter).padding(16.dp),
+                    modifier = Modifier.Companion.align(Alignment.Companion.BottomCenter)
+                        .padding(16.dp),
                 ) {
                     Text(text = msg)
                 }

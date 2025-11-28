@@ -49,7 +49,7 @@ object MockRepo {
             networkJson
         } catch (e: IOException) {
             // 网络请求失败时，从缓存加载，如果缓存也失败则抛出异常
-            loadFromCache(context) ?: throw IOException("网络加载失败")
+            loadFromCache(context) ?: throw IOException(StringsConstants.NETWORK_ERROR_MESSAGE)
         }
 
         // 清除旧数据并解析新数据

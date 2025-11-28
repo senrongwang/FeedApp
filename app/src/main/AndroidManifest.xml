@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FeedApp">
         <activity
-            android:name=".ui.splash.SplashActivity"
+            android:name=".ui.activity.SplashActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.FeedApp">
@@ -27,7 +27,7 @@
         </activity>
 <!--       主界面-->
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.FeedApp">

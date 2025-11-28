@@ -1,4 +1,4 @@
-package com.bytedance.feedapp.ui.splash
+package com.bytedance.feedapp.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import com.bytedance.feedapp.MainActivity
+import com.bytedance.feedapp.ui.activity.MainActivity
 import com.bytedance.feedapp.constants.IntegersConstants
 import com.bytedance.feedapp.ui.theme.FeedAppTheme
 import com.bytedance.feedapp.ui.theme.GeminiBlueEnd

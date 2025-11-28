@@ -1,4 +1,4 @@
-package com.bytedance.feedapp.ui.components
+package com.bytedance.feedapp.ui.helper
 
 import androidx.compose.runtime.Composable
 import com.bytedance.feedapp.model.FeedItem

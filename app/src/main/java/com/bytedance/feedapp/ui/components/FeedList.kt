@@ -24,6 +24,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import com.bytedance.feedapp.constants.StringsConstants
 import com.bytedance.feedapp.model.FeedItem
+import com.bytedance.feedapp.ui.helper.CardRegistry
 
 /**
  * `FeedList` 是一个 Composable 函数，用于显示信息流项目列表，并支持下拉刷新和无限滚动加载功能。
