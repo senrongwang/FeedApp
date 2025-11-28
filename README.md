@@ -15,39 +15,39 @@
   使用倒计时显示来模拟播放器，首先播放完整显示并且最靠上的视频。
 
 架构
-com.bytedance.feedapp
-├── constants
-│   └── AppConstants.kt           <-- 全局常量 (整合了原 String/Integer 常量)
-├── data
-│   └── MockRepo.kt               <-- 数据仓库 (负责网络模拟与本地缓存)
-├── model
-│   └── FeedItem.kt               <-- 数据实体模型 (Gson 解析对象)
-├── ui
-│   ├── activity                  <-- 页面容器
-│   │   ├── MainActivity.kt
-│   │   └── SplashActivity.kt
-│   ├── components                <-- UI 视图组件层
-│   │   ├── cards                 <-- 具体业务卡片 UI
-│   │   │   ├── ImageCard.kt
-│   │   │   ├── ProductCard.kt
-│   │   │   ├── TextCard.kt
-│   │   │   └── VideoCard.kt
-│   │   ├── common                <-- 通用/无业务逻辑组件
-│   │   │   └── SearchBar.kt
-│   │   ├── dialogs               <-- 弹窗组件
-│   │   │   └── DeleteConfirmationDialog.kt
-│   │   └── feed                  <-- 业务核心组件 (强耦合业务逻辑)
-│   │       ├── FeedList.kt
-│   │       └── FeedTabs.kt
-│   ├── debug                     <-- 调试专用工具 (可分离)
-│   │   └── ExposureDebugOverlay.kt
-│   ├── helper                    <-- 逻辑与状态辅助 (非 UI)
-│   │   ├── CardRegistry.kt       <-- 卡片工厂/注册表
-│   │   ├── FeedExposureUtils.kt  <-- 曝光计算纯逻辑
-│   │   └── FeedPlaybackManager.kt<-- 自动播放业务状态管理
-│   └── theme                     <-- Compose 主题样式
-│       ├── Color.kt
-│       ├── Theme.kt
-│       └── Type.kt
-└── viewmodel
-    └── FeedViewModel.kt          <-- 状态持有者 (MVVM 核心)
+com.bytedance.feedapp<br>
+├── constants<br>
+│   └── AppConstants.kt           <-- 全局常量 (整合了原 String/Integer 常量)<br>
+├── data<br>
+│   └── MockRepo.kt               <-- 数据仓库 (负责网络模拟与本地缓存)<br>
+├── model<br>
+│   └── FeedItem.kt               <-- 数据实体模型 (Gson 解析对象)<br>
+├── ui<br>
+│   ├── activity                  <-- 页面容器<br>
+│   │   ├── MainActivity.kt<br>
+│   │   └── SplashActivity.kt<br>
+│   ├── components                <-- UI 视图组件层<br>
+│   │   ├── cards                 <-- 具体业务卡片 UI<br>
+│   │   │   ├── ImageCard.kt<br>
+│   │   │   ├── ProductCard.kt<br>
+│   │   │   ├── TextCard.kt<br>
+│   │   │   └── VideoCard.kt<br>
+│   │   ├── common                <-- 通用/无业务逻辑组件<br>
+│   │   │   └── SearchBar.kt<br>
+│   │   ├── dialogs               <-- 弹窗组件<br>
+│   │   │   └── DeleteConfirmationDialog.kt<br>
+│   │   └── feed                  <-- 业务核心组件 (强耦合业务逻辑)<br>
+│   │       ├── FeedList.kt<br>
+│   │       └── FeedTabs.kt<br>
+│   ├── debug                     <-- 调试专用工具 (可分离)<br>
+│   │   └── ExposureDebugOverlay.kt<br>
+│   ├── helper                    <-- 逻辑与状态辅助 (非 UI)<br>
+│   │   ├── CardRegistry.kt       <-- 卡片工厂/注册表<br>
+│   │   ├── FeedExposureUtils.kt  <-- 曝光计算纯逻辑<br>
+│   │   └── FeedPlaybackManager.kt<-- 自动播放业务状态管理<br>
+│   └── theme                     <-- Compose 主题样式<br>
+│       ├── Color.kt<br>
+│       ├── Theme.kt<br>
+│       └── Type.kt<br>
+└── viewmodel<br>
+    └── FeedViewModel.kt          <-- 状态持有者 (MVVM 核心)<br>
