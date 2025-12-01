@@ -47,7 +47,4 @@ object AppConstants {
 
     /** 模拟自动播放视频的倒计时（秒）。*/
     const val AUTOPLAY_COUNT_DOWN = 5
-
-    // 曝光测试工具开关
-    const val SHOW_EXPOSURE_TEST_TOOL = false
 }

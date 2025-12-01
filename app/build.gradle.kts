@@ -24,8 +24,13 @@ android {
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
-                // 为 Release 版本定义 BuildConfig 字段
             )
+            // 为 Release 版本定义 BuildConfig 字段
+            buildConfigField("Boolean", "SHOW_EXPOSURE_TEST_TOOL", "false")
+        }
+        debug {
+            // 为 Debug 版本定义 BuildConfig 字段
+            buildConfigField("Boolean", "SHOW_EXPOSURE_TEST_TOOL", "true")
         }
     }
     compileOptions {
@@ -37,6 +42,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
