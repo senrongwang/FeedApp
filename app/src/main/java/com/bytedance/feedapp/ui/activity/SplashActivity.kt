@@ -24,7 +24,6 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.bytedance.feedapp.constants.AppConstants
-import com.bytedance.feedapp.ui.activity.MainActivity
 import com.bytedance.feedapp.ui.theme.FeedAppTheme
 import com.bytedance.feedapp.ui.theme.GeminiBlueEnd
 import com.bytedance.feedapp.ui.theme.GeminiBlueStart

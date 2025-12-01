@@ -38,10 +38,6 @@ class FeedViewModel(application: Application) : AndroidViewModel(application) {
     private var currentPage = 1
     private val pageSize = 5
 
-    init {
-        loadInitialData()
-    }
-
     /** 当用户切换标签页时调用。*/
     fun onTabSelected(index: Int) {
         selectedTabIndex.value = index
@@ -124,7 +120,7 @@ class FeedViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /** 在协程中加载初始数据，由 MockRepo 处理缓存逻辑。*/
-    private fun loadInitialData() {
+    fun loadInitialData() {
         viewModelScope.launch {
             try {
                 MockRepo.loadAndParseFeedData()

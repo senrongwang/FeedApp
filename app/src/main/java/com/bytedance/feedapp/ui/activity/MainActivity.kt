@@ -2,6 +2,7 @@ package com.bytedance.feedapp.ui.activity
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -53,13 +54,20 @@ import com.bytedance.feedapp.viewmodel.FeedViewModel
 import kotlinx.coroutines.delay
 
 class MainActivity : AppCompatActivity() {
+
+    private val feedViewModel: FeedViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // 预加载数据
+        feedViewModel.loadInitialData()
+
         registerCardViews()
         setContent {
             FeedAppTheme {
                 Surface(color = MaterialTheme.colorScheme.background) {
-                    FeedApp()
+                    FeedApp(feedViewModel)
                 }
             }
         }
@@ -113,7 +121,7 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
     val playbackManager = remember { FeedPlaybackManager() }
 
     // 功能开关：设置为 true 以显示曝光测试工具，设置为 false 以隐藏它
-    val showExposureTestTool = true
+    val showExposureTestTool = AppConstants.SHOW_EXPOSURE_TEST_TOOL
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column {

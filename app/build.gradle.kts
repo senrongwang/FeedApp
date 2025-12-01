@@ -24,6 +24,7 @@ android {
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
+                // 为 Release 版本定义 BuildConfig 字段
             )
         }
     }
