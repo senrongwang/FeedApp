@@ -69,20 +69,55 @@ object MockRepo {
 
     /**
      * 根据标签页和分页参数获取信息流项目。
+     *
+     * 原始实现：
+     * fun getFeedItemsForTab(tab: String, page: Int, pageSize: Int): List<FeedItem> {
+     *     val itemsForTab = allFeedData[tab] ?: return emptyList()
+     *     // 创建一个副本以避免在迭代时被修改
+     *     val safeList = synchronized(itemsForTab) {
+     *         itemsForTab.toList()
+     *     }
+     *     val startIndex = (page - 1) * pageSize
+     *     if (startIndex >= safeList.size) {
+     *         return emptyList()
+     *     }
+     *     val endIndex = (startIndex + pageSize).coerceAtMost(safeList.size)
+     *     return safeList.subList(startIndex, endIndex)
+     * }
      */
     fun getFeedItemsForTab(tab: String, page: Int, pageSize: Int): List<FeedItem> {
-        val itemsForTab = allFeedData[tab] ?: return emptyList()
-        // 创建一个副本以避免在迭代时被修改
-        val safeList = synchronized(itemsForTab) {
-            itemsForTab.toList()
-        }
-        val startIndex = (page - 1) * pageSize
-        if (startIndex >= safeList.size) {
+        // 获取该标签下的模板数据
+        val templateItems = allFeedData[tab] ?: return emptyList()
+        if (templateItems.isEmpty()) {
             return emptyList()
         }
-        val endIndex = (startIndex + pageSize).coerceAtMost(safeList.size)
-        return safeList.subList(startIndex, endIndex)
+
+        // 模拟无限数据：为每个请求的页面生成新的数据项
+        return (0 until pageSize).map { index ->
+            // 从模板列表中循环选择一个项目
+            val templateItem = templateItems[(page * pageSize + index) % templateItems.size]
+            // 创建新的唯一ID
+            val newId = "${templateItem.id}_page${page}_index${index}"
+
+            // 根据模板项的类型创建新的数据项
+            when (templateItem) {
+                is TextFeedItem -> templateItem.copy(id = newId)
+                is ImageFeedItem -> {
+                    // 通过修改 seed 生成新的图片 URL
+                    val newImageUrl = templateItem.imageUrl.replaceAfter("/seed/", "$newId/400/300")
+                    templateItem.copy(id = newId, imageUrl = newImageUrl)
+                }
+                is VideoFeedItem -> templateItem.copy(id = newId) // 视频通常是固定的，所以只更新ID
+                is ProductFeedItem -> {
+                    // 通过修改 seed 生成新的图片 URL
+                    val newImageUrl = templateItem.imageUrl.replaceAfter("/seed/", "$newId/400/300")
+                    templateItem.copy(id = newId, imageUrl = newImageUrl)
+                }
+                else -> templateItem // 作为后备，理论上不应发生
+            }
+        }
     }
+
 
     /**
      * 从数据源中删除指定的信息流项目。
