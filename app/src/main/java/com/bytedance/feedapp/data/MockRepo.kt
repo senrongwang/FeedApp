@@ -85,6 +85,16 @@ object MockRepo {
      *     return safeList.subList(startIndex, endIndex)
      * }
      */
+
+    /**
+     * 根据标签页、分页参数和布局模式，动态生成一个全新的、随机的信息流项目列表。
+     * 这个方法模拟了一个拥有无限数据的真实后端 API。
+     *
+     * @param tab 当前标签页。
+     * @param page 请求的页码
+     * @param pageSize 需要生成的卡片数量。
+     * @return 一个包含 `pageSize` 个全新随机卡片的列表。
+     */
     fun getFeedItemsForTab(tab: String, page: Int, pageSize: Int): List<FeedItem> {
         // 获取该标签下的模板数据
         val templateItems = allFeedData[tab] ?: return emptyList()
