@@ -122,8 +122,8 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
     val playbackManager = remember { FeedPlaybackManager() }
 
     // 功能开关：设置为 true 以显示曝光测试工具，设置为 false 以隐藏它
-    val showExposureTestTool = BuildConfig.SHOW_EXPOSURE_TEST_TOOL
-
+//    val showExposureTestTool = BuildConfig.SHOW_EXPOSURE_TEST_TOOL
+    val showExposureTestTool = false
     Box(modifier = Modifier.fillMaxSize()) {
         Column {
             // 搜索框
