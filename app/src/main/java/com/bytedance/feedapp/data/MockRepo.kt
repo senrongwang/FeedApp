@@ -34,22 +34,32 @@ object MockRepo {
     // 使用 ConcurrentHashMap 提高线程安全性
     private var allFeedData: ConcurrentHashMap<String, MutableList<FeedItem>> = ConcurrentHashMap()
 
+    @Volatile
+    private lateinit var appContext: Context
+
+    fun init(context: Context) {
+        appContext = context.applicationContext
+    }
+
     /**
      * 加载并解析信息流数据。所有I/O和解析操作都在IO线程上执行。
      * 首先尝试从模拟的网络（assets/feed_data.json）加载，如果成功则缓存数据。
      * 如果失败，则尝试从本地缓存加载。
      * 如果两者都失败，则抛出异常。
      */
-    suspend fun loadAndParseFeedData(context: Context) = withContext(Dispatchers.IO) {
+    suspend fun loadAndParseFeedData() = withContext(Dispatchers.IO) {
+        if (!::appContext.isInitialized) {
+            throw IllegalStateException("MockRepo must be initialized in Application.onCreate()")
+        }
         val jsonString = try {
             // 模拟网络请求
-            val networkJson = context.assets.open(FILE_NAME).bufferedReader().use { it.readText() }
-            saveToCache(context, networkJson)
+            val networkJson = appContext.assets.open(FILE_NAME).bufferedReader().use { it.readText() }
+            saveToCache(networkJson)
             Log.d("loadingLocal", "loading fileName: $FILE_NAME")
             networkJson
         } catch (e: IOException) {
             // 网络请求失败时，从缓存加载，如果缓存也失败则抛出异常
-            loadFromCache(context) ?: throw IOException(AppConstants.NETWORK_ERROR_MESSAGE)
+            loadFromCache() ?: throw IOException(AppConstants.NETWORK_ERROR_MESSAGE)
         }
 
         // 清除旧数据并解析新数据
@@ -103,9 +113,9 @@ object MockRepo {
     /**
      * 将数据保存到应用的内部存储作为缓存。
      */
-    private fun saveToCache(context: Context, jsonString: String) {
+    private fun saveToCache(jsonString: String) {
         try {
-            val file = File(context.filesDir, CACHE_FILE_NAME)
+            val file = File(appContext.filesDir, CACHE_FILE_NAME)
             file.writeText(jsonString)
         } catch (e: IOException) {
             e.printStackTrace()
@@ -115,9 +125,9 @@ object MockRepo {
     /**
      * 从内部存储的缓存文件中加载数据。
      */
-    private fun loadFromCache(context: Context): String? {
+    private fun loadFromCache(): String? {
         return try {
-            val file = File(context.filesDir, CACHE_FILE_NAME)
+            val file = File(appContext.filesDir, CACHE_FILE_NAME)
             Log.d("loadingLocal", "loading fileName: $CACHE_FILE_NAME")
             if (file.exists()) {
                 file.readText()

@@ -54,7 +54,7 @@ class FeedViewModel(application: Application) : AndroidViewModel(application) {
             isRefreshing.value = true
             showErrorMessage.value = null // 清除旧的错误信息
             try {
-                MockRepo.loadAndParseFeedData(getApplication())
+                MockRepo.loadAndParseFeedData()
                 fetchInitialFeedItems(AppConstants.TABS[selectedTabIndex.value])
                 showSuccessMessage.value = true
                 delay(AppConstants.SUCCESS_MESSAGE_DELAY)
@@ -127,7 +127,7 @@ class FeedViewModel(application: Application) : AndroidViewModel(application) {
     private fun loadInitialData() {
         viewModelScope.launch {
             try {
-                MockRepo.loadAndParseFeedData(getApplication())
+                MockRepo.loadAndParseFeedData()
                 fetchInitialFeedItems(AppConstants.TABS[selectedTabIndex.value])
             } catch (e: IOException) {
                 showErrorMessage.value = AppConstants.NETWORK_ERROR_MESSAGE
