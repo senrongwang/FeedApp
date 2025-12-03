@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
@@ -130,6 +131,7 @@ fun FeedApp(feedViewModel: FeedViewModel = viewModel()) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .statusBarsPadding() // 防止遮挡系统状态栏
                     .padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
