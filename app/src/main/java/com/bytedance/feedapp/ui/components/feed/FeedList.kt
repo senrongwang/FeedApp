@@ -180,7 +180,7 @@ fun FeedList(
 
                 TrackCardExposure(
                     gridState = gridState,
-                    cardId = item.id,
+                    item = item,
                     callback = exposureCallback
                 )
             }

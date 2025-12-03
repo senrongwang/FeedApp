@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import com.bytedance.feedapp.constants.AppConstants
+import com.bytedance.feedapp.model.FeedItem
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlin.math.max
@@ -29,7 +30,7 @@ enum class ExposureStatus {
  * 曝光回调接口
  */
 interface ExposureCallback {
-    fun onExposureStateChanged(cardId: Any, status: ExposureStatus, gridState: LazyStaggeredGridState)
+    fun onExposureStateChanged(item: FeedItem, status: ExposureStatus, gridState: LazyStaggeredGridState)
 }
 
 /**
@@ -38,18 +39,18 @@ interface ExposureCallback {
 @Composable
 fun TrackCardExposure(
     gridState: LazyStaggeredGridState,
-    cardId: Any,
+    item: FeedItem,
     callback: ExposureCallback
 ) {
-    LaunchedEffect(gridState, cardId) {
+    LaunchedEffect(gridState, item.id) {
         snapshotFlow { gridState.layoutInfo to gridState.firstVisibleItemScrollOffset }
             .map { (layoutInfo, _) ->
-                val itemInfo = layoutInfo.visibleItemsInfo.find { it.key == cardId }
+                val itemInfo = layoutInfo.visibleItemsInfo.find { it.key == item.id }
                 if (itemInfo == null) {
                     ExposureStatus.DISAPPEARED
                 } else {
                     val visiblePercentage = calculateVisiblePercentage(itemInfo, layoutInfo)
-                    Log.d(TAG, "cardId: $cardId, percentage: $visiblePercentage") // 根据需要开启日志
+                    Log.d(TAG, "cardId: ${item.id}, percentage: $visiblePercentage") // 根据需要开启日志
                     when {
                         visiblePercentage >= 1.0f -> ExposureStatus.FULLY_VISIBLE
                         visiblePercentage >= 0.5f -> ExposureStatus.VISIBLE_50_PERCENT
@@ -60,7 +61,7 @@ fun TrackCardExposure(
             }
             .distinctUntilChanged()
             .collect { newStatus ->
-                callback.onExposureStateChanged(cardId, newStatus, gridState)
+                callback.onExposureStateChanged(item, newStatus, gridState)
             }
     }
 }
