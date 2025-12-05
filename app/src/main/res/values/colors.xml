@@ -7,4 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- ... 其他颜色 ... -->
+    <color name="gemini_blue_start">#FF62A0F5</color>
+    <color name="gemini_blue_end">#FF2A67C2</color>
 </resources>

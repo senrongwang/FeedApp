@@ -2,4 +2,16 @@
 <resources>
 
     <style name="Theme.FeedApp" parent="Theme.MaterialComponents.DayNight.NoActionBar" />
+
+    <!-- 新建一个专门用于启动页的主题 -->
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <!-- 关键：设置启动窗口的背景为我们刚刚创建的渐变 Drawable -->
+        <item name="windowSplashScreenBackground">@color/gemini_blue_end</item>
+<!--        <item name="windowSplashScreenBackground">@drawable/launch_gradient</item>-->
+        <!-- 移除启动图标 -->
+        <item name="windowSplashScreenAnimatedIcon">@android:color/transparent</item>
+
+        <!-- 启动画面结束后要应用的主题 -->
+        <item name="postSplashScreenTheme">@style/Theme.FeedApp</item>
+    </style>
 </resources>
